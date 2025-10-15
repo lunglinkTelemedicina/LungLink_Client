@@ -7,7 +7,7 @@ public class Main {
         //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
         // to see how IntelliJ IDEA suggests fixing it.
         IO.println(String.format("Hello and welcome!"));
-        //omida: la crema de garbanzos es una forma muy sencilla y sabrosa de disfrutar de una buena ración de legumbres. Para continuar, proponemos unos espaguetis a la boloñesa, un clásico de la cocina casera que no puede estar más rico.
+        //Comida: la crema de garbanzos es una forma muy sencilla y sabrosa de disfrutar de una buena ración de legumbres. Para continuar, proponemos unos espaguetis a la boloñesa, un clásico de la cocina casera que no puede estar más rico.
         //Cena: el revuelto de bacalao es un plato muy nutritivo y sencillo de preparar, estupendo para disfrutar de una cena rápida.
 
 
