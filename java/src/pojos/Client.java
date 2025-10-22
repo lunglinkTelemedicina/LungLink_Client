@@ -1,5 +1,7 @@
 package src.pojos;
 
+import java.util.List;
+
 public class Client {
 
     private int clientId;
@@ -12,7 +14,7 @@ public class Client {
     private List<MedicalHistory> medicalHistory;
     //private List<Doctor> doctors;
 
-    public class Client(){
+    public Client(){
 
     }
 
