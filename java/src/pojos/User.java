@@ -1,4 +1,4 @@
-package src.pojos;
+package pojos;
 
 import java.io.Serializable;
 
@@ -39,7 +39,4 @@ public class User implements Serializable{
     public String toString() {
         return "User{" + "username=" + username + ", password=" + password + ", userId=" + id + '}';
     }
-}
-
-
 }

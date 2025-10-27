@@ -1,5 +1,7 @@
-package src.pojos;
+package pojos;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Client {
@@ -7,26 +9,19 @@ public class Client {
     private int clientId;
     private String name;
     private String surname;
-    private int age;
+    private LocalDate dob;
     private String mail;
     private Sex sex;
     private User user;
     private List<MedicalHistory> medicalHistory;
-    //private List<Doctor> doctors;
+    private List<Doctor> doctors;
 
-    public Client(){
-
-    }
-
-    public Client(int clientId, String name, String surname, int age, String mail, Sex sex, User user, List<MedicalHistory> medicalHistory) {
+    public Client(int clientId, String name, String surname, Sex sex) {
         this.clientId = clientId;
         this.name = name;
         this.surname = surname;
-        this.age = age;
-        this.mail = mail;
-        this.sex = sex;
-        this.user = user;
-        this.medicalHistory = medicalHistory;
+        this.medicalHistory = new ArrayList<MedicalHistory>();
+        this.doctors=new ArrayList<Doctor>();
     }
 
     public int getClientId() {
@@ -53,13 +48,9 @@ public class Client {
         this.surname = surname;
     }
 
-    public int getAge() {
-        return age;
-    }
+    public LocalDate getDob() { return dob; }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    public void setDob(LocalDate dob) { this.dob = dob; }
 
     public String getMail() {
         return mail;
@@ -93,17 +84,20 @@ public class Client {
         this.medicalHistory = medicalHistory;
     }
 
+    public List<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public void setDoctors(List<Doctor> doctors) {
+        this.doctors = doctors;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
-                "clientId=" + clientId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", age=" + age +
-                ", mail='" + mail + '\'' +
-                ", sex=" + sex +
-                ", user=" + user +
-                ", medicalHistory=" + medicalHistory +
+                ", clientId=" + clientId +
                 '}';
     }
 }
