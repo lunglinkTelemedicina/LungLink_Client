@@ -12,16 +12,20 @@ public class Client {
     private LocalDate dob;
     private String mail;
     private Sex sex;
-    private User user;
+    //private User user;
     private List<MedicalHistory> medicalHistory;
-    private List<Doctor> doctors;
+    private int doctorId;
+
+    public Client(){
+
+    }
 
     public Client(int clientId, String name, String surname, Sex sex) {
         this.clientId = clientId;
         this.name = name;
         this.surname = surname;
         this.medicalHistory = new ArrayList<MedicalHistory>();
-        this.doctors=new ArrayList<Doctor>();
+        this.doctorId=doctorId;
     }
 
     public int getClientId() {
@@ -68,13 +72,13 @@ public class Client {
         this.sex = sex;
     }
 
-    public User getUser() {
+    /*public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public List<MedicalHistory> getMedicalHistory() {
         return medicalHistory;

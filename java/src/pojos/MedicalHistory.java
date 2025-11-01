@@ -144,8 +144,6 @@ public class MedicalHistory {
         this.symptomsList = symptomsList;
     }
 
-
-
     /*
     @Override
     public String toString() {
