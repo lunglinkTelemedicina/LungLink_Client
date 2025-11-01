@@ -2,65 +2,39 @@ package pojos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MedicalHistory {
 
-    //private String clientName;
-    //private String clientSurname;
-    //private LocalDate dob;
-    private int recordId;          // identificador único del historial
+
+    private String recordId;          // identificador único del historial
     private LocalDate date;        // fecha de la medición o visita
-    private int patientId;
+    private int clientId;
     private int doctorId;
     private Signal signalEMG;
     private Signal signalECG;
-    //private double height;         // altura registrada en ese momento
-    //private double weight;         // peso registrado
-    //private Status status;         // enum: HEALTHY, UNHEALTHY, UNKNOWN
-    private String data;          // observaciones médicas o comentarios
-    //private Signal signalEMG;      // señal electromiográfica
-    //private Signal signalECG;      // señal electrocardiográfica
-    //cuando sepamos cuales son hay que añadir las señales del bitalino
-    //tambien los doctors cuando toque
-    private List<Symptoms> symptomsList;
+    private String observations;          // observaciones médicas o comentarios
+    private List<String> symptomsList;
 
     public MedicalHistory() {
         //constructor vacio
     }
 
-/*
-    public MedicalHistory(String clientName, String clientSurname, LocalDate dob, double height, double weight) {
-        this.clientName = clientName;
-        this.clientSurname = clientSurname;
-        this.dob = dob;
-        this.height = height;
-        this.weight = weight;
+    public MedicalHistory(int clientId, int doctorId, String observations) {
+        this.recordId = "RECORD_"+clientId;
+        this.date=LocalDate.now();
+        this.clientId = clientId;
+        this.doctorId = doctorId;
+        this.observations = observations;
+        this.symptomsList = new ArrayList<String>();
     }
 
-
-    public String getClientName() {
-        return clientName;
-    }
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
-    public String getClientSurname() {
-        return clientSurname;
-    }
-    public void setClientSurname(String clientSurname) {
-        this.clientSurname = clientSurname;
-    }
-
-    public LocalDate getDob() { return dob; }
-    public void setDob(LocalDate dob) { this.dob = dob; }*/
-
-    public int getRecordId() {
+    public String getRecordId() {
         return recordId;
     }
 
-    public void setRecordId(int recordId) {
+    public void setRecordId(String recordId) {
         this.recordId = recordId;
     }
 
@@ -72,44 +46,20 @@ public class MedicalHistory {
         this.date = date;
     }
 
-    /*public double getHeight() {
-        return height;
+    public String getObservations() {
+        return observations;
     }
 
-    public void setHeight(double height) {
-        this.height = height;
+    public void setObservations(String observations) {
+        this.observations = observations;
     }
 
-    public double getWeight() {
-        return weight;
+    public int getClientId() {
+        return clientId;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }*/
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public int getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(int patientId) {
-        this.patientId = patientId;
+    public void setClientId(int patientId) {
+        this.clientId = patientId;
     }
 
     public int getDoctorId() {
@@ -136,13 +86,19 @@ public class MedicalHistory {
         this.signalECG = signalECG;
     }
 
-    public List<Symptoms> getSymptomsList() {
+    public List<String> getSymptomsList() {
         return symptomsList;
     }
 
-    public void setSymptomsList(List<Symptoms> symptomsList) {
+    public void setSymptomsList(List<String> symptomsList) {
         this.symptomsList = symptomsList;
     }
+    public void recordSignals(){
+        System.out.println("elige si queires ECG o EMG");
+        //switch
+        //TODO el resto
+    }
+
 
     /*
     @Override

@@ -20,12 +20,15 @@ public class Client {
 
     }
 
-    public Client(int clientId, String name, String surname, Sex sex) {
-        this.clientId = clientId;
+    public Client(String name, String surname, Sex sex, LocalDate dob, String mail) {
+        this.clientId = clientId; //TODO funcion crear id
         this.name = name;
         this.surname = surname;
+        this.sex=sex;
+        this.dob = dob;
+        this.mail = mail;
         this.medicalHistory = new ArrayList<MedicalHistory>();
-        this.doctorId=doctorId;
+        this.doctorId= doctorId;//TODO funcion q asigne
     }
 
     public int getClientId() {
@@ -88,13 +91,35 @@ public class Client {
         this.medicalHistory = medicalHistory;
     }
 
-    public List<Doctor> getDoctors() {
-        return doctors;
+    public int getDoctorId() {
+        return doctorId;
     }
 
-    public void setDoctors(List<Doctor> doctors) {
-        this.doctors = doctors;
+    public void setDoctors(int doctorId) {
+        this.doctorId = doctorId;
     }
+
+
+    public int createClientId(){
+        //TODO elegir si random o no random
+        return ++clientId;
+    }
+    public void addExtraInfo(){
+        //TODO funcion
+    }
+
+    public List<String>viewResults(){
+        //TODO funcion
+        return null;//cambiar el null
+    }
+
+    public void registerSymptoms(){
+        //TODO funcion
+    }
+
+
+
+
 
     @Override
     public String toString() {

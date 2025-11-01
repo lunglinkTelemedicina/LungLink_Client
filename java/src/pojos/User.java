@@ -8,10 +8,10 @@ public class User implements Serializable{
     public String username;
     public byte[] password;
 
-    public User(int id, String username, byte[] password) {
+    public User(int id, byte[] password) {
         this.id = id;
-        this.username = username;
-        this.password = password;
+        this.username =getUsername();//TODO funcion que coja todo lo que esta antes del @ del mail
+        this.password = password; //TODO mas adelante crear encryption
     }
 
     public int  getId() {
