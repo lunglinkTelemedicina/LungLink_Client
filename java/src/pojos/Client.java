@@ -1,5 +1,7 @@
 package pojos;
 
+import pojos.Sex;
+import pojos.MedicalHistory;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
