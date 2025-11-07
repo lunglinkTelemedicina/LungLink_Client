@@ -1,20 +1,38 @@
 package main;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import pojos.Client;
+import pojos.MedicalHistory;
+import pojos.Sex;
+import services.ClientService;
+
+import java.time.LocalDate;
+
+/**
+ * Clase principal para probar las funciones de ClientService.
+ */
 public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        //IO.println(String.format("Hello and welcome!"));
-/*
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            //IO.println("i = " + i);
-            for (int j = 1; j <= 5; j++) {
-                //System.out.println("cuento "+j);
-            }
-        }*/
+    public static void main(String[] args) {
+
+        // 1. Creamos un cliente de ejemplo con algunos datos
+        Client paula = new Client(
+                "Paula",
+                "Reyero",
+                Sex.FEMALE,
+                LocalDate.of(2004, 9, 14),
+                "preyero@mail.com"
+        );
+
+
+        ClientService service = new ClientService();
+        service.registerSymptoms(paula);
+
+        //Muestra historial médico
+        System.out.println("\n--- CLIENT MEDICAL HISTORY ---");
+        for (MedicalHistory history : paula.getMedicalHistory()) {
+            System.out.println("Date: " + history.getDate());
+            System.out.println("Symptoms: " + history.getSymptomsList());
+            System.out.println("-------------------------------");
+        }
+
     }
 }

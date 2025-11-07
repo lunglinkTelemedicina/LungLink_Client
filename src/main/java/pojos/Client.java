@@ -113,9 +113,7 @@ public class Client {
         return null;//cambiar el null
     }
 
-    public void registerSymptoms(){
-        //TODO funcion
-    }
+    //RegisterSymptoms hecho en ClientService
 
 
 

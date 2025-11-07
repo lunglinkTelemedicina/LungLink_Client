@@ -29,6 +29,14 @@ public class MedicalHistory {
         this.symptomsList = new ArrayList<String>();
     }
 
+    public MedicalHistory(int clientId, int doctorId) {
+        this.recordId = "RECORD_" + clientId;
+        this.date = LocalDate.now();
+        this.clientId = clientId;
+        this.doctorId = doctorId;
+        this.observations = ""; // se deja vacío por defecto
+        this.symptomsList = new ArrayList<>();
+    }
     public String getRecordId() {
         return recordId;
     }
@@ -92,12 +100,12 @@ public class MedicalHistory {
     public void setSymptomsList(List<String> symptomsList) {
         this.symptomsList = symptomsList;
     }
+
     public void recordSignals(){
         System.out.println("elige si queires ECG o EMG");
         //switch
         //TODO el resto
     }
-
 
     /*
     @Override
