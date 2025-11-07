@@ -109,10 +109,7 @@ public class Client {
         //TODO funcion
     }
 
-    public List<String>viewResults(){
-        //TODO funcion
-        return null;//cambiar el null
-    }
+
 
     //RegisterSymptoms hecho en ClientService
 
