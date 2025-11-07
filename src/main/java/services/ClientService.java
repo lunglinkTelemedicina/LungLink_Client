@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -98,5 +99,29 @@ public class ClientService {
             }
         }
         System.out.println("End of medical history.");
+    }
+
+    public void addExtraInformation(Client client) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        try {
+            System.out.println("=== ADD EXTRA INFORMATION ===");
+
+            System.out.print("Enter your height (in cm): ");
+            double height = Double.parseDouble(reader.readLine());
+
+            System.out.print("Enter your weight (in kg): ");
+            double weight = Double.parseDouble(reader.readLine());
+
+            // Guardar los datos en el objeto Client
+            client.setHeight(height);
+            client.setWeight(weight);
+
+            System.out.println("Extra information added successfully!");
+        } catch (IOException e) {
+            System.out.println("Error reading input: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format. Please enter numeric values.");
+        }
     }
 }

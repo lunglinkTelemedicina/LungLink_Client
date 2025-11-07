@@ -12,9 +12,11 @@ public class Client {
     private LocalDate dob;
     private String mail;
     private Sex sex;
-    //private User user;
+   // private User user;
     private List<MedicalHistory> medicalHistory;
     private int doctorId;
+    private double weight;
+    private double height;
 
     public Client(){
 
@@ -75,8 +77,22 @@ public class Client {
         this.sex = sex;
     }
 
+    public double getHeight() {
+        return height;
+    }
 
-    /*public User getUser() {
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+/*public User getUser() {
         return user;
     }
 
@@ -105,17 +121,6 @@ public class Client {
         //TODO elegir si random o no random
         return ++clientId;
     }
-    public void addExtraInfo(){
-        //TODO funcion
-    }
-
-
-
-    //RegisterSymptoms hecho en ClientService
-
-
-
-
 
     @Override
     public String toString() {
