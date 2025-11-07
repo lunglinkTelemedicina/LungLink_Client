@@ -30,13 +30,15 @@ public class Doctor { //TODO class
     public String getEmail() { return email; }
     public int getDoctorId() {return doctorId; }
 
-
     @Override
     public String toString() {
         return "Doctor{" +
                 "doctorId=" + doctorId +
                 ", name='" + name + '\'' +
-                ", specialty='" + specialty + '\'' +
+                ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", specialty=" + specialty +
+                ", patients=" + patients +
                 '}';
     }
 }
