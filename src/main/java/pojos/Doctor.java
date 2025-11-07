@@ -1,34 +1,35 @@
 package pojos;
 
+import java.util.List;
+
 public class Doctor { //TODO class
-    private static int nextId = 0;
     private int doctorId;
     private String name;
-    private String specialty;
-    //....
-    public Doctor(String name, String specialty /*...*/) {
+    private String surname;
+    private String email;
+    private DoctorSpecialty specialty;
+    private List<Client> patients;
+
+
+    public Doctor(String name,String surname, DoctorSpecialty specialty,String email, int doctorId ) {
         this.name = name;
+        this.surname=surname;
         this.specialty = specialty;
-        //...
-        this.doctorId = generateDoctorId();
-    }
-    private static int generateDoctorId() {
-        int id = nextId;
-        nextId++;
-        return id;
+        this.email=email;
+        this.doctorId = doctorId;
     }
 
-    public int getDoctorId() {
-        return doctorId;
-    }
 
     public String getName() {
         return name;
     }
-
-    public String getSpecialty() {
+    public String getSurname() {return surname; }
+    public DoctorSpecialty getSpecialty() {
         return specialty;
     }
+    public String getEmail() { return email; }
+    public int getDoctorId() {return doctorId; }
+
 
     @Override
     public String toString() {
