@@ -75,6 +75,7 @@ public class Client {
         this.sex = sex;
     }
 
+
     /*public User getUser() {
         return user;
     }
@@ -95,7 +96,7 @@ public class Client {
         return doctorId;
     }
 
-    public void setDoctors(int doctorId) {
+    public void setDoctorId(int doctorId) {
         this.doctorId = doctorId;
     }
 
