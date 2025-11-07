@@ -71,4 +71,32 @@ public class ClientService {
 
         }
     }
+    public void viewResults(Client client){
+        System.out.println("=== VIEW RESULTS ===");
+        //Comprobar que el cliente tenga una lista de historiales que no sea null
+        if(client.getMedicalHistory()== null || client.getMedicalHistory().isEmpty()){
+            System.out.println("No medical history records were found for this client.");
+            return;
+        }
+
+        //Si sí tiene historial, recorre cada uno y muestra la info
+        for (MedicalHistory history : client.getMedicalHistory()) {
+            System.out.println("Date: " + history.getDate());
+            System.out.println("Doctor ID: " + history.getDoctorId());
+            System.out.println("Patient ID: " + history.getClientId());
+
+            // Lista de síntomas
+            if (history.getSymptomsList() != null && !history.getSymptomsList().isEmpty()) {
+                System.out.println("Symptoms: " + history.getSymptomsList());
+            } else {
+                System.out.println("Symptoms: [none]");
+            }
+
+            //Observations and additional data
+            if(history.getObservations() != null && history.getObservations().isEmpty()){
+                System.out.println("Observations: " +history.getObservations());
+            }
+        }
+        System.out.println("End of medical history.");
+    }
 }
