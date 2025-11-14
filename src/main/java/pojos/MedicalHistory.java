@@ -6,7 +6,6 @@ import java.util.List;
 
 public class MedicalHistory {
 
-
     private String recordId;          // identificador único del historial
     private LocalDate date;        // fecha de la medición o visita
     private int clientId;
@@ -101,11 +100,14 @@ public class MedicalHistory {
         this.symptomsList = symptomsList;
     }
 
+    /*
+    TODO ESTE METODO TIENE QUE IR A UNA CLASE DE SERVICIO DEL SERVIDOR
+
     public void recordSignals(){
         System.out.println("elige si queires ECG o EMG");
         //switch
         //TODO el resto
-    }
+    }*/
 
     /*
     @Override

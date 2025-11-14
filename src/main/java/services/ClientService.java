@@ -3,6 +3,7 @@ package services;
 //En esta clase están las funciones que un cliente (paciente)
 // puede hacer, como registrar síntomas, ver resultados, etc.
 
+import Network.ClientConnection;
 import pojos.Client;
 import pojos.MedicalHistory;
 
@@ -23,12 +24,26 @@ public class ClientService {
      * Cada vez que se ejecuta, se crea un nuevo objeto MedicalHistory
      * que guarda los síntomas escritos por el usuario junto con la fecha actual.
      */
-    public void registerSymptoms(Client client) {
+
+    /**
+     * El paciente (CLIENTE) rellena los síntomas.
+     * Esos síntomas SE ENVIAN al servidor.
+     * El servidor los guarda en la historia clínica (archivo o BD).
+     *
+     * Lo único que he hecho es añadir:
+     * El envío del comando "SEND_SYMPTOMS"
+     * El envío de cada síntoma por el socket
+     * El envío del “END” para cerrar el bloque
+     * La lectura de respuesta del servidor
+     * */
+
+
+    public void registerSymptoms(Client client, ClientConnection conn) {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("=== REGISTER SYMPTOMS ===");
-        System.out.println("Please enter your symptoms one by one. Press Enter on an empty line to finish:");
+        System.out.println("Please enter your symptoms one by one. \n Press Enter on an empty line to finish: \n");
 
         try {
             List<String> newSymptoms = new ArrayList<>();
@@ -54,7 +69,7 @@ public class ClientService {
                 return;
             }
 
-            // Creamos un nuevo registro médico (historial) con la información del cliente
+            /*// Creamos un nuevo registro médico (historial) con la información del cliente
             MedicalHistory newHistory = new MedicalHistory(client.getClientId(), client.getDoctorId());
 
             // Guardamos la lista de síntomas y la fecha actual
@@ -66,12 +81,24 @@ public class ClientService {
 
             System.out.println("\nSymptoms registered successfully on " + newHistory.getDate());
             System.out.println("Recorded symptoms: " + newSymptoms);
+            */
+
+            conn.send("SEND SYMPTOMS");
+            for(String s: newSymptoms){
+                conn.send(s);
+            }
+            conn.send("END");
+
+            String reply = conn.receive(); //servers response
+            System.out.println("SERVER: " + reply);
 
         } catch (IOException ex) {
             Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
 
         }
     }
+
+
     public void viewResults(Client client){
         System.out.println("=== VIEW RESULTS ===");
         //Comprobar que el cliente tenga una lista de historiales que no sea null
