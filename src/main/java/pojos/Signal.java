@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Signal {
+
+    //TODO EMPEZAR A AÑADIR TRY CATCH Y EXCEPTIONS
     private List<Integer> values;
     private String signalFile;
     private TypeSignal type;
