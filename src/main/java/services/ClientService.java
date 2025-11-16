@@ -83,11 +83,14 @@ public class ClientService {
             System.out.println("Recorded symptoms: " + newSymptoms);
             */
 
-            conn.send("SEND SYMPTOMS");
-            for(String s: newSymptoms){
-                conn.send(s);
-            }
-            conn.send("END");
+            /* 1º coge todos los sintomas que ha escrito el usuario y juntamos en un unico string
+             * 2º conn.send lo que hace es enviar el mensaje al servidor usando PrintWriter.println()
+             * 3º conn.receive espera que el servidor le responda y muestra la respuesta
+             */
+
+            String payload = String.join(",", newSymptoms);
+            String message = "SEND_SYMPTOMS|" + client.getClientId() + "|" + payload;
+            conn.send(message);
 
             String reply = conn.receive(); //servers response
             System.out.println("SERVER: " + reply);
