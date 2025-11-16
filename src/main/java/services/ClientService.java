@@ -90,9 +90,9 @@ public class ClientService {
 
             String payload = String.join(",", newSymptoms);
             String message = "SEND_SYMPTOMS|" + client.getClientId() + "|" + payload;
-            conn.send(message);
+            conn.sendCommand(message);
 
-            String reply = conn.receive(); //servers response
+            String reply = conn.receiveResponse(); //servers response
             System.out.println("SERVER: " + reply);
 
         } catch (IOException ex) {

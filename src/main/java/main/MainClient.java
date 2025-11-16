@@ -23,7 +23,7 @@ public class MainClient {
 
         while ((line = console.readLine()) != null) {
 
-            client.send(line);
+            client.sendCommand(line);
 
             if (line.equalsIgnoreCase("x") || line.equalsIgnoreCase("DISCONNECT")) {
                 client.disconnect();

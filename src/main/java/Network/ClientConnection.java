@@ -10,51 +10,71 @@ import java.net.Socket;
 
 public class ClientConnection {
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private DataOutputStream dataOut;
+    private DataInputStream dataIn;
 
     public boolean connect(String ip, int port){
         try{
             socket = new Socket(ip, port);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            dataOut = new DataOutputStream(socket.getOutputStream());
+            dataIn = new DataInputStream(socket.getInputStream());
+
             System.out.println("Connected to server.");
             return true;
+
         }catch(IOException e){
-            System.out.println("Connection failed.");
+            System.out.println("Connection failed." + e.getMessage());
             return false;
         }
     }
 
-    public void send(String line){
-        out.println(line);
+    public void sendCommand(String msg){
+        try{
+            dataOut.writeUTF(msg);
+            dataOut.flush();
+        }catch(IOException e){
+            System.out.println("Send failed." + e.getMessage());
+        }
     }
 
-    public String receive(){
+    /* Receive text response*/
+    public String receiveResponse(){
         try{
-            return in.readLine();
+            return dataIn.readUTF();
         }catch(IOException e){
             return null;
         }
     }
 
+
+    /* Send binary samples (BITalino) */
+    public void sendBytes(byte[] data){
+        try{
+            dataOut.writeInt(data.length);
+            dataOut.write(data);
+            dataOut.flush();
+        }catch(IOException e){
+            System.out.println("Error sendign bytes." + e.getMessage());
+        }
+    }
+
     public void disconnect() {
-        send("DISCONNECT");
+        sendCommand("DISCONNECT");
         releaseResources();
         System.out.println("Disconnected from server.");
     }
 
     private void releaseResources() {
         try {
-            if (in != null) {
-                in.close();
+            if (dataIn != null) {
+                dataIn.close();
             }
         } catch (IOException e) {
             System.out.println("Error closing input stream: " + e.getMessage());
         }
         try {
-            if (out != null) {
-                out.close();
+            if (dataOut != null) {
+                dataOut.close();
             }
         } catch (Exception e) {
             System.out.println("Error closing output stream: " + e.getMessage());
