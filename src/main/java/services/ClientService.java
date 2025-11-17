@@ -1,9 +1,12 @@
 package services;
 
+//TODO probar que funciona bien
+
 //En esta clase están las funciones que un cliente (paciente)
 // puede hacer, como registrar síntomas, ver resultados, etc.
 
 import Network.ClientConnection;
+import Network.CommandType;
 import pojos.Client;
 import pojos.MedicalHistory;
 import utils.UIUtils;
@@ -45,15 +48,15 @@ public class ClientService {
         System.out.println("Please enter your symptoms one by one.");
         System.out.println("Press Enter on an empty line to finish: \n");
 
-            List<String> newSymptoms = new ArrayList<>();
+        List<String> newSymptoms = new ArrayList<>();
 
-            while (true) {
-                String symptom = UIUtils.readString("Symptom: ");
+        while (true) {
+            String symptom = UIUtils.readString("Symptom: ");
 
-                if (symptom.isEmpty()){
+            if (symptom.isEmpty()){
                     break;
-                }
-                    newSymptoms.add(symptom);
+            }
+            newSymptoms.add(symptom);
             }
 
             // Si el usuario no ha introducido ningún síntoma, salimos del metodo
@@ -78,12 +81,13 @@ public class ClientService {
 
             try {
                 String payload = String.join(",", newSymptoms);
-                String message = "SEND_SYMPTOMS|" + client.getClientId() + "|" + payload;
+                String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + payload;
                 conn.sendCommand(message);
 
                 String reply = conn.receiveResponse(); //servers response
                 System.out.println("SERVER: " + reply);
-            }catch (Exception ex) {//TODO:ESTA EXCEPCION NO DEBERIA SALTAR NUNCA LA QUITAMOS??
+
+            }catch (Exception ex) {
                 Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Error while sending symptoms.");
             }
@@ -128,7 +132,7 @@ public class ClientService {
         double height = UIUtils.readDouble("Enter your height (in cm): ");
         double weight = UIUtils.readDouble("Enter your weight (in kg): ");
 
-        String command = "ADD_EXTRA_INFO|" + client.getClientId() + "|" + height + "|" + weight;
+        String command = CommandType.ADD_EXTRA_INFO.name() + "|" + client.getClientId() + "|" + height + "|" + weight;
 
         conn.sendCommand(command);
 
@@ -173,7 +177,7 @@ public class ClientService {
 
         try {
             // 1. Send the command to the server
-            String command = "GET_HISTORY|" + client.getClientId();
+            String command = CommandType.GET_HISTORY.name() + "|" + client.getClientId();
             conn.sendCommand(command);
 
             // 2. Receive server response
@@ -189,8 +193,15 @@ public class ClientService {
                 System.out.println("Server error: " + response);
                 return;
             }
-
-            // 4. Display results
+//            // HISTORY|contenido
+//            if (response.startsWith("HISTORY|")) {
+//                String historyBody = response.substring("HISTORY|".length());
+//
+//                System.out.println("\n--- Medical History ---");
+//                System.out.println(historyBody);
+//                System.out.println("------------------------");
+//            }
+                // 4. Display results
             System.out.println("\n--- Medical History ---");
             System.out.println(response);
             System.out.println("------------------------");
@@ -201,35 +212,31 @@ public class ClientService {
         }
     }
 
+    //TODO queremos que el paciente vea sus señales?
+    //TODO habria que revisarlo
     //El cliente elegirá entre ECG, EMG o las dos
     public void viewSignals(Client client, ClientConnection conn) {
         System.out.println("=== VIEW SIGNALS ===");
 
         System.out.println("1. View ECG signals");
         System.out.println("2. View EMG signals");
-        System.out.println("3. View all signals");
+        System.out.println("3. View ALL signals");
 
         int option = UIUtils.readInt("Choose an option: ");
 
-        String command = "";
+        String type;
 
         switch (option) {
-            case 1:
-                command = "GET_SIGNALS|ECG|" + client.getClientId();
-                break;
-
-            case 2:
-                command = "GET_SIGNALS|EMG|" + client.getClientId();
-                break;
-
-            case 3:
-                command = "GET_SIGNALS|ALL|" + client.getClientId();
-                break;
-
+            case 1: type = "ECG"; break;
+            case 2: type = "EMG"; break;
+            case 3: type = "ALL"; break;
             default:
                 System.out.println("Invalid option.");
                 return;
         }
+
+        String command = CommandType.GET_SIGNALS.name() + "|" + type + "|" + client.getClientId();
+        conn.sendCommand(command);
 
         try {
             // Send command to server
@@ -247,6 +254,16 @@ public class ClientService {
                 System.out.println("Server error: " + response);
                 return;
             }
+
+            /*
+            * if (response.startsWith("SIGNALS|")) {
+
+            String body = response.substring("SIGNALS|".length());
+
+            System.out.println("\n--- Signals ---");
+            System.out.println(body);
+            System.out.println("----------------\n");
+            }*/
 
             // Display raw data (then you can format it better)
             System.out.println("\n--- Signals ---");

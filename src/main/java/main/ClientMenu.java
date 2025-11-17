@@ -1,6 +1,7 @@
 package main;
 
 import Network.ClientConnection;
+import Network.CommandType;
 import pojos.Client;
 import services.ClientService;
 import utils.UIUtils;
@@ -32,30 +33,41 @@ public class ClientMenu {
 
             switch (option) {
                 case 1:
+                    // Envía al servidor:
+                    // SEND_SYMPTOMS|clientId|symptom1,symptom2,
                     service.registerSymptoms(client, conn);
                     break;
 
                 case 2:
+                    // TODO: enviar señal ECG
                     service.sendECG(client, conn);
                     break;
 
                 case 3:
+                    // TODO: enviar señal EMG
                     service.sendEMG(client, conn);
                     break;
 
                 case 4:
+                    // Envía al servidor:
+                    // GET_HISTORY|clientId
                     service.viewHistory(client, conn);
                     break;
 
-                case 5:
-                    service.viewSignals(client, conn);
+                case 5://TODO queremos que el paciente vea las señales?
+                    // Envía al servidor:
+                    // GET_SIGNALS|ECG/EMG/ALL|clientId
+//                    service.viewSignals(client, conn);
                     break;
 
                 case 6:
+                    // Envía al servidor:
+                    // ADD_EXTRA_INFO|clientId|height|weight
                     service.addExtraInformation(client, conn);
                     break;
 
                 case 7:
+                    conn.sendCommand(CommandType.DISCONNECT.name());
                     conn.disconnect();
                     exit = true;
                     break;
