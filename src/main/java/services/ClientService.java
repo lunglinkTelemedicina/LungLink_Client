@@ -212,71 +212,7 @@ public class ClientService {
         }
     }
 
-    //TODO queremos que el paciente vea sus señales?
-    //TODO habria que revisarlo
-    //El cliente elegirá entre ECG, EMG o las dos
-    public void viewSignals(Client client, ClientConnection conn) {
-        System.out.println("=== VIEW SIGNALS ===");
-
-        System.out.println("1. View ECG signals");
-        System.out.println("2. View EMG signals");
-        System.out.println("3. View ALL signals");
-
-        int option = UIUtils.readInt("Choose an option: ");
-
-        String type;
-
-        switch (option) {
-            case 1: type = "ECG"; break;
-            case 2: type = "EMG"; break;
-            case 3: type = "ALL"; break;
-            default:
-                System.out.println("Invalid option.");
-                return;
-        }
-
-        String command = CommandType.GET_SIGNALS.name() + "|" + type + "|" + client.getClientId();
-        conn.sendCommand(command);
-
-        try {
-            // Send command to server
-            conn.sendCommand(command);
-
-            // Receive server response
-            String response = conn.receiveResponse();
-
-            if (response == null) {
-                System.out.println("No response received from server.");
-                return;
-            }
-
-            if (response.startsWith("ERROR")) {
-                System.out.println("Server error: " + response);
-                return;
-            }
-
-            /*
-            * if (response.startsWith("SIGNALS|")) {
-
-            String body = response.substring("SIGNALS|".length());
-
-            System.out.println("\n--- Signals ---");
-            System.out.println(body);
-            System.out.println("----------------\n");
-            }*/
-
-            // Display raw data (then you can format it better)
-            System.out.println("\n--- Signals ---");
-            System.out.println(response);
-            System.out.println("----------------\n");
-
-        } catch (Exception ex) {
-            Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("An error occurred while receiving signals.");
-        }
-    }
-
-
+    
 
 
 }
