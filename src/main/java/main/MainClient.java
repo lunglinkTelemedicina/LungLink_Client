@@ -10,9 +10,9 @@ import java.io.InputStreamReader;
 
 public class MainClient {
     public static void main(String[] args) throws IOException {
-        ClientConnection conn = new ClientConnection();
+        ClientConnection connection = new ClientConnection();
 
-        if (!conn.connect("localhost", 9000)) {
+        if (!connection.connect("localhost", 9000)) {
             System.out.println("Could not connect to server.");
             return;
         }
@@ -24,7 +24,8 @@ public class MainClient {
         testClient.setSex(Sex.FEMALE);
 
         // Start menu
-        ClientMenu menu = new ClientMenu(testClient, conn);
+        System.out.println("Connected.");
+        ClientMenu menu = new ClientMenu(testClient, connection);
         menu.displayMenu();
 
 //        System.out.println("Connected. Type a message to the server.");
@@ -42,5 +43,5 @@ public class MainClient {
 //                break;
 //            }
 //        }
-    }
-}
+    }}
+
