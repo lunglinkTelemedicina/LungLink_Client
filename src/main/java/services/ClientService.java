@@ -152,7 +152,7 @@ public class ClientService {
 
     }
 
-    public void sendSignal(Signal signal, ClientConnection conn) {
+    /*public void sendSignal(Signal signal, ClientConnection conn) {
         List<Integer> values = signal.getValues();
         if(values.isEmpty()){
             System.out.println("No signals were added.");
@@ -162,7 +162,7 @@ public class ClientService {
         String msg ="SEND_SIGNAL|" + signal.getClientId() + "|" + signal.getType() + "|" + values.size() + "|" + payload;
         conn.sendCommand(msg);
         System.out.println("Signal sent " + signal.getType() + "to the server.");
-    }
+    }*/
 
     public void sendECG(Client client, ClientConnection conn) {
         // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|ECG|12 13 15 20 18...
