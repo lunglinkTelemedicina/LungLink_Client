@@ -9,6 +9,7 @@ import Network.ClientConnection;
 import Network.CommandType;
 import pojos.Client;
 import pojos.MedicalHistory;
+import pojos.Signal;
 import utils.UIUtils;
 
 import java.io.BufferedReader;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class ClientService {
 
@@ -64,20 +66,6 @@ public class ClientService {
                 System.out.println("No symptoms were added.");
                 return;
             }
-
-            /*// Creamos un nuevo registro médico (historial) con la información del cliente
-            MedicalHistory newHistory = new MedicalHistory(client.getClientId(), client.getDoctorId());
-
-            // Guardamos la lista de síntomas y la fecha actual
-            newHistory.setSymptomsList(newSymptoms);
-            newHistory.setDate(LocalDate.now());
-
-            // Añadimos este registro médico completo al historial del cliente
-            client.getMedicalHistory().add(newHistory);
-
-            System.out.println("\nSymptoms registered successfully on " + newHistory.getDate());
-            System.out.println("Recorded symptoms: " + newSymptoms);
-            */
 
             try {
                 String payload = String.join(",", newSymptoms);
@@ -162,6 +150,18 @@ public class ClientService {
 //            System.out.println("Invalid number format. Please enter numeric values.");
 //        }
 
+    }
+
+    public void sendSignal(Signal signal, ClientConnection conn) {
+        List<Integer> values = signal.getValues();
+        if(values.isEmpty()){
+            System.out.println("No signals were added.");
+            return;
+        }
+        String payload = values.stream().map(String::valueOf).collect(Collectors.joining(","));
+        String msg ="SEND_SIGNAL|" + signal.getClientId() + "|" + signal.getType() + "|" + values.size() + "|" + payload;
+        conn.sendCommand(msg);
+        System.out.println("Signal sent " + signal.getType() + "to the server.");
     }
 
     public void sendECG(Client client, ClientConnection conn) {

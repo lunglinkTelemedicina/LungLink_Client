@@ -57,7 +57,7 @@ public class Signal {
         return sb.toString();
     }
 
-    public void setValuesFromBitalino ( String data){
+    public void setValuesFromBitalino (String data){
         this.values=new LinkedList<>();
         String[] element=data.split(",");
         for (String e:element) {
