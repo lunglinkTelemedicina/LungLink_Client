@@ -162,6 +162,7 @@ public class ClientService {
         String msg ="SEND_SIGNAL|" + signal.getClientId() + "|" + signal.getType() + "|" + values.size() + "|" + payload;
         conn.sendCommand(msg);
         System.out.println("Signal sent " + signal.getType() + "to the server.");
+        conn.sendCommand(
     }*/
 
     public void sendECG(Client client, ClientConnection conn) {
