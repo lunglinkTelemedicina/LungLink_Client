@@ -147,6 +147,7 @@ public class ClientService {
         }
 
         try {
+            int samplesNumber = values.size();
             // Elegir comando según tipo de señal
             String command = (signal.getType() == TypeSignal.ECG)
                     ? CommandType.SEND_ECG.name()

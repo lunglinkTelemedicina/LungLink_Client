@@ -7,7 +7,7 @@ public class Signal {
 
     //TODO EMPEZAR A AÑADIR TRY CATCH Y EXCEPTIONS
     private List<Integer> values;
-    private String signalFile;
+    private String signalFile;  //este atributo q es
     private TypeSignal type;
     private static final int samplingRate=100; //en hercios
     private int clientId;
@@ -51,27 +51,31 @@ public class Signal {
         this.clientId = clientId;
     }
 
+    public void addSample(int sample){
+        values.add(sample);
+    }
+
     //este metodo es para q al mandarlo por sockets sea mas comodo, va a ser cadena con espacios
-    public String valuesString() {
-        StringBuilder sb = new StringBuilder();
-        String sep=" ";
+//    public String valuesString() {
+//        StringBuilder sb = new StringBuilder();
+//        String sep=" ";
+//
+//        for (int i=0;i<values.size();i++) {
+//            sb.append(values.get(i));
+//            if(i<values.size()-1) {
+//                sb.append(sep);
+//            }
+//        }
+//        return sb.toString();
+//    }
 
-        for (int i=0;i<values.size();i++) {
-            sb.append(values.get(i));
-            if(i<values.size()-1) {
-                sb.append(sep);
-            }
-        }
-        return sb.toString();
-    }
-
-    public void setValuesFromBitalino (String data){
-        this.values=new LinkedList<>();
-        String[] element=data.split(",");
-        for (String e:element) {
-            this.values.add(Integer.parseInt(e));
-        }
-    }
+//    public void setValuesFromBitalino (String data){
+//        this.values=new LinkedList<>();
+//        String[] element=data.split(",");
+//        for (String e:element) {
+//            this.values.add(Integer.parseInt(e));
+//        }
+//    }
 
     public byte[] toByteArray() {
         byte[] data = new byte[values.size() * 2]; // 2 bytes por muestra
