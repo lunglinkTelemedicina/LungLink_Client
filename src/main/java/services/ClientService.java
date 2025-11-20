@@ -148,7 +148,6 @@ public class ClientService {
 
         try {
             int samplesNumber = values.size();
-            // Elegir comando según tipo de señal
             String command = (signal.getType() == TypeSignal.ECG)
                     ? CommandType.SEND_ECG.name()
                     : CommandType.SEND_EMG.name();
@@ -157,18 +156,24 @@ public class ClientService {
             String header = command + "|" + signal.getClientId() + "|" + values.size();
             conn.sendCommand(header);
 
-            // Datos binarios: cada muestra en bytes
-            byte[] bytes = signal.toByteArray();
-            conn.sendBytes(bytes);
-
-            System.out.println("Signal " + signal.getType() +
-                    " sent (" + values.size() + " samples).");
-
             // Leer confirmación del servidor (si la envía)
             String reply = conn.receiveResponse();
             if (reply != null) {
                 System.out.println("SERVER: " + reply);
+                return;
             }
+
+            // Datos binarios: enviar bytes de la señal
+            byte[] data = signal.toByteArray();
+            conn.sendBytes(data);
+
+            // Recibir confirmación
+            String finalReply = conn.receiveResponse();
+            System.out.println("SERVER: " + finalReply);
+
+            System.out.println("Signal " + signal.getType() +
+                    " sent (" + values.size() + " samples).");
+
 
         } catch (Exception e) {
             System.out.println("Error sending signal: " + e.getMessage());

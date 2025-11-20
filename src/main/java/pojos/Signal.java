@@ -1,39 +1,28 @@
 package pojos;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Signal {
 
-    //TODO EMPEZAR A AÑADIR TRY CATCH Y EXCEPTIONS
-    private List<Integer> values;
-    private String signalFile;  //este atributo q es
-    private TypeSignal type;
-    private static final int samplingRate=100; //en hercios
-    private int clientId;
+    private TypeSignal type;         // ECG o EMG
+    private int clientId;            // Paciente
+    private int recordId;            // (solo servidor lo usa)
+    private List<Integer> values;    // Muestras de la señal
+
+    public Signal() {
+        this.values = new ArrayList<>();
+    }
 
     public Signal(TypeSignal type, int clientId) {
-        this.values=new LinkedList<Integer>();
-        this.type=type;
-        this.clientId=clientId;
+        this.type = type;
+        this.clientId = clientId;
+        this.values = new ArrayList<>();
     }
 
-
-    public List<Integer> getValues() {
-        return values;
-    }
-
-    public void setValues(List<Integer> values) {
-        this.values = values;
-    }
-
-    public String getSignalFile() {
-        return signalFile;
-    }
-
-    public void setSignalFile(String signalFile) {
-        this.signalFile = signalFile;
-    }
+    // ------------------------------
+    // GETTERS / SETTERS
+    // ------------------------------
 
     public TypeSignal getType() {
         return type;
@@ -51,44 +40,43 @@ public class Signal {
         this.clientId = clientId;
     }
 
-    public void addSample(int sample){
+    public int getRecordId() {
+        return recordId;
+    }
+
+    public void setRecordId(int recordId) {
+        this.recordId = recordId;
+    }
+
+    public List<Integer> getValues() {
+        return values;
+    }
+
+    public void setValues(List<Integer> values) {
+        this.values = values;
+    }
+
+    public void addSample(int sample) {
         values.add(sample);
     }
 
-    //este metodo es para q al mandarlo por sockets sea mas comodo, va a ser cadena con espacios
-//    public String valuesString() {
-//        StringBuilder sb = new StringBuilder();
-//        String sep=" ";
-//
-//        for (int i=0;i<values.size();i++) {
-//            sb.append(values.get(i));
-//            if(i<values.size()-1) {
-//                sb.append(sep);
-//            }
-//        }
-//        return sb.toString();
-//    }
 
-//    public void setValuesFromBitalino (String data){
-//        this.values=new LinkedList<>();
-//        String[] element=data.split(",");
-//        for (String e:element) {
-//            this.values.add(Integer.parseInt(e));
-//        }
-//    }
+    // BYTE ARRAY -> Para enviar señal al servidor
+
 
     public byte[] toByteArray() {
-        byte[] data = new byte[values.size() * 2]; // 2 bytes por muestra
-
+        byte[] data = new byte[values.size() * 2];
         int pos = 0;
-        for (Integer val : values) {
-            short s = val.shortValue(); // Bitalino values caben en short
 
+        for (int v : values) {
+            short s = (short) v;
             data[pos++] = (byte) (s >> 8);   // byte alto
-            data[pos++] = (byte) (s);        // byte bajo
+            data[pos++] = (byte) s;          // byte bajo
         }
-
         return data;
     }
 
+
+
 }
+
