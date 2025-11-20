@@ -38,12 +38,12 @@ public class ClientMenu {
 
                     case 2:
                         // TODO: enviar señal ECG
-                        service.sendECG(client, connection);
+                      //  service.sendSignal(signal, connection);
                         break;
 
                     case 3:
                         // TODO: enviar señal EMG
-                        service.sendEMG(client, connection);
+                     //   service.sendSignal(signal, connection);
                         break;
 
                     case 4:
