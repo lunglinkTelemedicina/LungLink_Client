@@ -43,6 +43,14 @@ public class Signal {
         this.type = type;
     }
 
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
     //este metodo es para q al mandarlo por sockets sea mas comodo, va a ser cadena con espacios
     public String valuesString() {
         StringBuilder sb = new StringBuilder();

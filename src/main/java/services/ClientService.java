@@ -10,6 +10,7 @@ import Network.CommandType;
 import pojos.Client;
 import pojos.MedicalHistory;
 import pojos.Signal;
+import pojos.TypeSignal;
 import utils.UIUtils;
 
 import java.io.BufferedReader;
@@ -44,9 +45,9 @@ public class ClientService {
      * */
 
 
-    public void registerSymptoms(Client client, ClientConnection conn) {
+    public void registerSymptoms(Client client, ClientConnection clientConnection) {
 
-        System.out.println("=== REGISTER SYMPTOMS ===");
+        System.out.println("REGISTER SYMPTOMS");
         System.out.println("Please enter your symptoms one by one.");
         System.out.println("Press Enter on an empty line to finish: \n");
 
@@ -68,11 +69,12 @@ public class ClientService {
             }
 
             try {
-                String payload = String.join(",", newSymptoms);
-                String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + payload;
-                conn.sendCommand(message);
+                //Coge una lista de Strings y las junta en una única cadena, separadas por comas
+                String symptomsString = String.join(",", newSymptoms);
+                String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + symptomsString;
+                clientConnection.sendCommand(message);
 
-                String reply = conn.receiveResponse(); //servers response
+                String reply = clientConnection.receiveResponse(); //servers response "OK|Symptoms saved"
                 System.out.println("SERVER: " + reply);
 
             }catch (Exception ex) {
@@ -113,25 +115,25 @@ public class ClientService {
 //        System.out.println("End of medical history.");
 //    }
 
-    public void addExtraInformation(Client client, ClientConnection conn) {
+    public void addExtraInformation(Client client, ClientConnection clientConnection) {
         //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
         // try {
-        System.out.println("=== ADD EXTRA INFORMATION ===");
+        System.out.println("ADD EXTRA INFORMATION");
         double height = UIUtils.readDouble("Enter your height (in cm): ");
         double weight = UIUtils.readDouble("Enter your weight (in kg): ");
 
-        String command = CommandType.ADD_EXTRA_INFO.name() + "|" + client.getClientId() + "|" + height + "|" + weight;
+        String message = CommandType.ADD_EXTRA_INFO.name() + "|" + client.getClientId() + "|" + height + "|" + weight;
 
-        conn.sendCommand(command);
+        clientConnection.sendCommand(message);
 
-        String reply = conn.receiveResponse();
+        String reply = clientConnection.receiveResponse();
 
         if (reply == null) {
             System.out.println("No response from server.");
             return;
         }
 
-        System.out.println("SERVER: " + reply);
+        System.out.println("SERVER: " + reply); //client must receive form server: "OK|Extra info saved"
 
 //            System.out.print("Enter your height (in cm): ");
 //            double height = Double.parseDouble(reader.readLine());
@@ -152,37 +154,69 @@ public class ClientService {
 
     }
 
-    /*public void sendSignal(Signal signal, ClientConnection conn) {
+    public void sendSignal(Signal signal, ClientConnection clientConnection) {
         List<Integer> values = signal.getValues();
         if(values.isEmpty()){
             System.out.println("No signals were added.");
             return;
         }
-        String payload = values.stream().map(String::valueOf).collect(Collectors.joining(","));
-        String msg ="SEND_SIGNAL|" + signal.getClientId() + "|" + signal.getType() + "|" + values.size() + "|" + payload;
-        conn.sendCommand(msg);
-        System.out.println("Signal sent " + signal.getType() + "to the server.");
-        conn.sendCommand(
-    }*/
+        //Convertir a string
+        String valuesString = signal.valuesString();
 
-    public void sendECG(Client client, ClientConnection conn) {
-        // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|ECG|12 13 15 20 18...
+        //elige entre ECG o EMG
+        String commandName = (signal.getType() == TypeSignal.ECG)
+                ? CommandType.SEND_ECG.name()
+                : CommandType.SEND_EMG.name();
+
+        //Construir mensaje
+        String message = commandName + "|" + signal.getClientId() + "|" + valuesString;
+
+        //enviar y recibir
+        try {
+            System.out.println("Sending " + signal.getType() + " signal (" +
+                    values.size() + " samples)...");
+
+            clientConnection.sendCommand(message);
+
+            String reply = clientConnection.receiveResponse();
+
+            if (reply == null) {
+                System.out.println("SERVER ERROR: No reply received.");
+                return;
+            }
+
+            System.out.println("SERVER: " + reply);
+
+        } catch (Exception e) {
+            System.out.println("Error sending signal: " + e.getMessage());
+        }
+
+
+//        String valuesString = values.stream().map(String::valueOf).collect(Collectors.joining(" "));
+//        String msg ="SEND_SIGNAL|" + signal.getClientId() + "|" + signal.getType() + "|" + values.size() + "|" + valuesString;
+//        clientConnection.sendCommand(msg);
+//        System.out.println("Signal sent " + signal.getType() + "to the server.");
+//        clientConnection.sendCommand(
     }
 
-    public void sendEMG(Client client, ClientConnection conn) {
-        // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|EMG|12 13 15 20 18...
-    }
+//    public void sendECG(Client client, ClientConnection clientConnection) {
+//        // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|ECG|12 13 15 20 18...
+//    }
+//
+//    public void sendEMG(Client client, ClientConnection clientConnection) {
+//        // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|EMG|12 13 15 20 18...
+//    }
 
-    public void viewHistory(Client client, ClientConnection conn) {
+    public void viewHistory(Client client, ClientConnection clientConnection) {
         System.out.println("=== VIEW MEDICAL HISTORY ===");
 
         try {
             // 1. Send the command to the server
             String command = CommandType.GET_HISTORY.name() + "|" + client.getClientId();
-            conn.sendCommand(command);
+            clientConnection.sendCommand(command);
 
             // 2. Receive server response
-            String response = conn.receiveResponse();
+            String response = clientConnection.receiveResponse();
 
             if (response == null) {
                 System.out.println("No response received from the server.");

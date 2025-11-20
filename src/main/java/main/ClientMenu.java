@@ -52,19 +52,13 @@ public class ClientMenu {
                         service.viewHistory(client, connection);
                         break;
 
-                    case 5://TODO queremos que el paciente vea las señales?
-                        // Envía al servidor:
-                        // GET_SIGNALS|ECG/EMG/ALL|clientId
-//                    service.viewSignals(client, conn);
-                        break;
-
-                    case 6:
+                    case 5:
                         // Envía al servidor:
                         // ADD_EXTRA_INFO|clientId|height|weight
                         service.addExtraInformation(client, connection);
                         break;
 
-                    case 7:
+                    case 6:
 //                        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 //                        String line = UIUtils.readString("Type 'DISCONNECT' to exit.");
 //
@@ -92,9 +86,8 @@ public class ClientMenu {
         System.out.println("2. Send ECG signal");
         System.out.println("3. Send EMG signal");
         System.out.println("4. View medical history");
-        System.out.println("5. View signals");
-        System.out.println("6. Add extra information");
-        System.out.println("7. Disconnect");
+        System.out.println("5. Add extra information");
+        System.out.println("6. Disconnect");
     }
 }
 
