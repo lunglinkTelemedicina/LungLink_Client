@@ -135,100 +135,45 @@ public class ClientService {
 
         System.out.println("SERVER: " + reply); //client must receive form server: "OK|Extra info saved"
 
-//            System.out.print("Enter your height (in cm): ");
-//            double height = Double.parseDouble(reader.readLine());
-
-//            System.out.print("Enter your weight (in kg): ");
-//            double weight = Double.parseDouble(reader.readLine());
-
-                // Guardar los datos en el objeto Client
-                //client.setHeight(height);
-                //client.setWeight(weight);
-
-                //System.out.println("Extra information added successfully!");
-//        } catch (IOException e) {
-//            System.out.println("Error reading input: " + e.getMessage());
-//        } catch (NumberFormatException e) {
-//            System.out.println("Invalid number format. Please enter numeric values.");
-//        }
 
     }
 
-//    public void sendSignal(Signal signal, ClientConnection clientConnection) {
-//        List<Integer> values = signal.getValues();
-//        if(values.isEmpty()){
-//            System.out.println("No signals were added.");
-//            return;
-//        }
-//        //Convertir a string
-//        String valuesString = signal.valuesString();
-//
-//        //elige entre ECG o EMG
-//        String commandName = (signal.getType() == TypeSignal.ECG)
-//                ? CommandType.SEND_ECG.name()
-//                : CommandType.SEND_EMG.name();
-//
-//        //Construir mensaje
-//        String message = commandName + "|" + signal.getClientId() + "|" + valuesString;
-//
-//        //enviar y recibir
-//        try {
-//            System.out.println("Sending " + signal.getType() + " signal (" +
-//                    values.size() + " samples)...");
-//
-//            clientConnection.sendCommand(message);
-//
-//            String reply = clientConnection.receiveResponse();
-//
-//            if (reply == null) {
-//                System.out.println("SERVER ERROR: No reply received.");
-//                return;
-//            }
-//
-//            System.out.println("SERVER: " + reply);
-//
-//        } catch (Exception e) {
-//            System.out.println("Error sending signal: " + e.getMessage());
-//        }
+    public void sendSignal(Signal signal, ClientConnection conn) {
 
-        public void sendSignal(Signal signal, ClientConnection conn) {
+        List<Integer> values = signal.getValues();
+        if (values == null || values.isEmpty()) {
+            System.out.println("No values in signal.");
+            return;
+        }
 
-            List<Integer> values = signal.getValues();
-            if (values.isEmpty()) {
-                System.out.println("No values in signal");
-                return;
-            }
-
-            // mensaje UTF primero
+        try {
+            // Elegir comando según tipo de señal
             String command = (signal.getType() == TypeSignal.ECG)
                     ? CommandType.SEND_ECG.name()
                     : CommandType.SEND_EMG.name();
 
+            // Cabecera: comando | clientId | numberOfSamples
             String header = command + "|" + signal.getClientId() + "|" + values.size();
             conn.sendCommand(header);
 
-            // enviar binario real
+            // Datos binarios: cada muestra en bytes
             byte[] bytes = signal.toByteArray();
             conn.sendBytes(bytes);
 
-            System.out.println("Signal sent (" + values.size() + " samples)");
+            System.out.println("Signal " + signal.getType() +
+                    " sent (" + values.size() + " samples).");
+
+            // Leer confirmación del servidor (si la envía)
+            String reply = conn.receiveResponse();
+            if (reply != null) {
+                System.out.println("SERVER: " + reply);
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error sending signal: " + e.getMessage());
         }
-
-
-//        String valuesString = values.stream().map(String::valueOf).collect(Collectors.joining(" "));
-//        String msg ="SEND_SIGNAL|" + signal.getClientId() + "|" + signal.getType() + "|" + values.size() + "|" + valuesString;
-//        clientConnection.sendCommand(msg);
-//        System.out.println("Signal sent " + signal.getType() + "to the server.");
-//        clientConnection.sendCommand(
     }
 
-//    public void sendECG(Client client, ClientConnection clientConnection) {
-//        // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|ECG|12 13 15 20 18...
-//    }
-//
-//    public void sendEMG(Client client, ClientConnection clientConnection) {
-//        // TODO: convertir datos a string, enviar comando tipo SEND_SIGNAL|clientId|EMG|12 13 15 20 18...
-//    }
 
     public void viewHistory(Client client, ClientConnection clientConnection) {
         System.out.println("=== VIEW MEDICAL HISTORY ===");
@@ -260,9 +205,9 @@ public class ClientService {
 //                System.out.println("------------------------");
 //            }
                 // 4. Display results
-            System.out.println("\n--- Medical History ---");
+            System.out.println("\nMedical History");
             System.out.println(response);
-            System.out.println("------------------------");
+
 
         } catch (Exception ex) {
             Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
@@ -270,7 +215,8 @@ public class ClientService {
         }
     }
 
+}
+
     
 
 
-}

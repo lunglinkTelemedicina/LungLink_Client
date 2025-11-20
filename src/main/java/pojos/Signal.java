@@ -74,6 +74,17 @@ public class Signal {
     }
 
     public byte[] toByteArray() {
+        byte[] data = new byte[values.size() * 2]; // 2 bytes por muestra
 
+        int pos = 0;
+        for (Integer val : values) {
+            short s = val.shortValue(); // Bitalino values caben en short
+
+            data[pos++] = (byte) (s >> 8);   // byte alto
+            data[pos++] = (byte) (s);        // byte bajo
+        }
+
+        return data;
     }
+
 }
