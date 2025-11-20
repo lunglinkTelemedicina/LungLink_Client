@@ -72,4 +72,8 @@ public class Signal {
             this.values.add(Integer.parseInt(e));
         }
     }
+
+    public byte[] toByteArray() {
+
+    }
 }

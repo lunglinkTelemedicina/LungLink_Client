@@ -154,41 +154,64 @@ public class ClientService {
 
     }
 
-    public void sendSignal(Signal signal, ClientConnection clientConnection) {
-        List<Integer> values = signal.getValues();
-        if(values.isEmpty()){
-            System.out.println("No signals were added.");
-            return;
-        }
-        //Convertir a string
-        String valuesString = signal.valuesString();
+//    public void sendSignal(Signal signal, ClientConnection clientConnection) {
+//        List<Integer> values = signal.getValues();
+//        if(values.isEmpty()){
+//            System.out.println("No signals were added.");
+//            return;
+//        }
+//        //Convertir a string
+//        String valuesString = signal.valuesString();
+//
+//        //elige entre ECG o EMG
+//        String commandName = (signal.getType() == TypeSignal.ECG)
+//                ? CommandType.SEND_ECG.name()
+//                : CommandType.SEND_EMG.name();
+//
+//        //Construir mensaje
+//        String message = commandName + "|" + signal.getClientId() + "|" + valuesString;
+//
+//        //enviar y recibir
+//        try {
+//            System.out.println("Sending " + signal.getType() + " signal (" +
+//                    values.size() + " samples)...");
+//
+//            clientConnection.sendCommand(message);
+//
+//            String reply = clientConnection.receiveResponse();
+//
+//            if (reply == null) {
+//                System.out.println("SERVER ERROR: No reply received.");
+//                return;
+//            }
+//
+//            System.out.println("SERVER: " + reply);
+//
+//        } catch (Exception e) {
+//            System.out.println("Error sending signal: " + e.getMessage());
+//        }
 
-        //elige entre ECG o EMG
-        String commandName = (signal.getType() == TypeSignal.ECG)
-                ? CommandType.SEND_ECG.name()
-                : CommandType.SEND_EMG.name();
+        public void sendSignal(Signal signal, ClientConnection conn) {
 
-        //Construir mensaje
-        String message = commandName + "|" + signal.getClientId() + "|" + valuesString;
-
-        //enviar y recibir
-        try {
-            System.out.println("Sending " + signal.getType() + " signal (" +
-                    values.size() + " samples)...");
-
-            clientConnection.sendCommand(message);
-
-            String reply = clientConnection.receiveResponse();
-
-            if (reply == null) {
-                System.out.println("SERVER ERROR: No reply received.");
+            List<Integer> values = signal.getValues();
+            if (values.isEmpty()) {
+                System.out.println("No values in signal");
                 return;
             }
 
-            System.out.println("SERVER: " + reply);
+            // mensaje UTF primero
+            String command = (signal.getType() == TypeSignal.ECG)
+                    ? CommandType.SEND_ECG.name()
+                    : CommandType.SEND_EMG.name();
 
-        } catch (Exception e) {
-            System.out.println("Error sending signal: " + e.getMessage());
+            String header = command + "|" + signal.getClientId() + "|" + values.size();
+            conn.sendCommand(header);
+
+            // enviar binario real
+            byte[] bytes = signal.toByteArray();
+            conn.sendBytes(bytes);
+
+            System.out.println("Signal sent (" + values.size() + " samples)");
         }
 
 
