@@ -30,7 +30,7 @@ public class UIUtils {
         }
     }
 
-    public static String readString(String message) {
+    public static String pero (String message) {
         while (true) {
             try {
                 System.out.print(message);

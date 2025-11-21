@@ -1,6 +1,6 @@
 package main;
 
-import Network.ClientConnection;
+import network.ClientConnection;
 import pojos.Client;
 import services.ClientService;
 import utils.UIUtils;

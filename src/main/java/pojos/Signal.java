@@ -75,8 +75,5 @@ public class Signal {
         }
         return data;
     }
-
-
-
 }
 

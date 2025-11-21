@@ -1,5 +1,8 @@
-package Network;
+package network;
 
+import pojos.Signal;
+import pojos.TypeSignal;
+import file.SignalFileManager;
 import java.io.*;
 import java.net.Socket;
 
@@ -47,16 +50,38 @@ public class ClientConnection {
     }
 
 
-    /* Send binary samples (BITalino) */
+    //Send binary samples (BITalino)
     public void sendBytes(byte[] data){
         try{
             dataOut.writeInt(data.length);
             dataOut.write(data);
             dataOut.flush();
         }catch(IOException e){
-            System.out.println("Error sendign bytes." + e.getMessage());
+            System.out.println("Error sending bytes." + e.getMessage());
         }
     }
+
+    public void sendSignalFromCSV(String filePath, int clientId, TypeSignal type){
+        try{
+            Signal signal = SignalFileManager.getSignalFromCSV(filePath, type, clientId);
+
+            // el servidor espera SEND_ECG o SEND_EMG
+            sendCommand("SEND_" + type.name() + "|" + clientId + "|" + signal.getValues().size());
+
+            String response = receiveResponse();
+            if (response == null || !response.equals("Client can send the data")) {
+                System.out.println("Server did not authorize sending data.");
+                return;
+            }
+
+            sendBytes(signal.toByteArray());
+            System.out.println("Signal sent successfully from CSV.");
+
+        } catch (IOException e) {
+            System.out.println("Error sending data from CSV: " + e.getMessage());
+        }
+    }
+
 
     public void disconnect() {
         sendCommand("DISCONNECT");

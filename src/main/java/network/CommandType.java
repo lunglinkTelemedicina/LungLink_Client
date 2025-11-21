@@ -1,4 +1,4 @@
-package Network;
+package network;
 
 //No es un pojo. No es un dato, es parte del protocolo de comunicación entre clietne y servidor
 public enum CommandType {

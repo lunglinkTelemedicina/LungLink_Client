@@ -1,12 +1,10 @@
 package main;
 
-import Network.ClientConnection;
+import network.ClientConnection;
 import pojos.Client;
 import pojos.Sex;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class MainClient {
     public static void main(String[] args) throws IOException {

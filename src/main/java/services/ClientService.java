@@ -5,24 +5,17 @@ package services;
 //En esta clase están las funciones que un cliente (paciente)
 // puede hacer, como registrar síntomas, ver resultados, etc.
 
-import Network.ClientConnection;
-import Network.CommandType;
+import network.ClientConnection;
+import network.CommandType;
 import pojos.Client;
-import pojos.MedicalHistory;
 import pojos.Signal;
 import pojos.TypeSignal;
 import utils.UIUtils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class ClientService {
 
