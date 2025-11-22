@@ -56,8 +56,9 @@ public class ClientMenu {
 
                     case 6: {
                         connection.disconnect();
-                        System.out.println("Disconnected from server.");
+                        System.out.println("Disconnected from server. \n");
                         exit = true;
+                        break;
                     }
                     default:
                         System.out.println("Invalid option, please try again.");
