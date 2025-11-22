@@ -22,8 +22,6 @@ public class ClientConnection {
             socket = new Socket(ip, port);
             dataOut = new DataOutputStream(socket.getOutputStream());
             dataIn = new DataInputStream(socket.getInputStream());
-
-            System.out.println("Connected to server.");
             return true;
 
         }catch(IOException e){
