@@ -1,6 +1,7 @@
 package main;
 
 import network.ClientConnection;
+import network.CommandType;
 import pojos.Client;
 import services.ClientService;
 import utils.UIUtils;
@@ -31,8 +32,6 @@ public class ClientMenu {
 
                 switch (option) {
                     case 1:
-                        // Envía al servidor:
-                        // SEND_SYMPTOMS|clientId|symptom1,symptom2,
                         service.registerSymptoms(client, connection);
                         break;
 
@@ -47,34 +46,22 @@ public class ClientMenu {
                         break;
 
                     case 4:
-                        // Envía al servidor:
-                        // GET_HISTORY|clientId
                         service.viewHistory(client, connection);
                         break;
 
                     case 5:
-                        // Envía al servidor:
-                        // ADD_EXTRA_INFO|clientId|height|weight
                         service.addExtraInformation(client, connection);
                         break;
 
-                    case 6:
-//                        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-//                        String line = UIUtils.readString("Type 'DISCONNECT' to exit.");
-//
-//                        if (line.equalsIgnoreCase("DISCONNECT")) {
-//                            client.disconnect();
-//                        } IMPORTANTE DESCONECTAR BIEN !!!
-                        break;
-//                    connection.sendCommand(CommandType.DISCONNECT.name());
-//                    connection.disconnect();
-//                    exit = true;
-
+                    case 6: {
+                        connection.disconnect();
+                        System.out.println("Disconnected from server.");
+                        exit = true;
+                    }
                     default:
                         System.out.println("Invalid option, please try again.");
                         break;
                 }
-                System.out.println("Exiting patient menu...");
             }
         }
 

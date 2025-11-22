@@ -2,12 +2,12 @@ package main;
 
 import network.ClientConnection;
 import pojos.Client;
-import pojos.Sex;
-
+import utils.UIUtils;
 import java.io.IOException;
 
 public class MainClient {
     public static void main(String[] args) throws IOException {
+
         ClientConnection connection = new ClientConnection();
 
         if (!connection.connect("localhost", 9000)) {
@@ -15,31 +15,35 @@ public class MainClient {
             return;
         }
 
-        // TEMPORARY TEST CLIENT (luego viene login/register)
-        Client testClient = new Client();
-        testClient.setClientId(1);
-        testClient.setName("Florinda");
-        testClient.setSex(Sex.FEMALE);
+        System.out.println("Connected to server.");
+        Client client = null;
 
-        // Start menu
-        System.out.println("Connected.");
-        ClientMenu menu = new ClientMenu(testClient, connection);
+        boolean logged = false;
+
+        while (!logged) {
+            System.out.println("\n1. Register");
+            System.out.println("2. Login");
+            System.out.println("3. Exit");
+
+            int option = UIUtils.readInt("Choose an option:");
+
+            switch (option) {
+                case 1 -> client = connection.register();
+                case 2 -> client = connection.login();
+                case 3 -> {
+                    connection.disconnect();
+                    return;
+                }
+                default -> System.out.println("Invalid option.");
+            }
+
+            if (client != null) {
+                logged = true;
+            }
+        }
+
+        // === START CLIENT MENU ===
+        ClientMenu menu = new ClientMenu(client, connection);
         menu.displayMenu();
-
-//        System.out.println("Connected. Type a message to the server.");
-//        System.out.println("Type 'x' or 'DISCONNECT' to exit.");
-//
-//        BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
-//        String line;
-//
-//        while ((line = console.readLine()) != null) {
-//
-//            client.sendCommand(line);
-//
-//            if (line.equalsIgnoreCase("x") || line.equalsIgnoreCase("DISCONNECT")) {
-//                client.disconnect();
-//                break;
-//            }
-//        }
-    }}
-
+    }
+}
