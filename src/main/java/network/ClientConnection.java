@@ -135,8 +135,7 @@ public class ClientConnection {
                 int id = Integer.parseInt(parts[1]);
                 String uname = parts[2];
 
-                User user = new User(id, password.getBytes());
-                user.setUsername(uname);
+                User user = new User(id, uname, password);
 
                 System.out.println("User login successful.");
 
@@ -172,8 +171,7 @@ public class ClientConnection {
             if (response.startsWith("OK|")) {
                 int id = Integer.parseInt(response.split("\\|")[1]);
 
-                User user = new User(id, password.getBytes());
-                user.setUsername(username);
+                User user = new User(id, username, password);
 
                 System.out.println("User account created. Your ID = " + id);
                 return user;

@@ -2,16 +2,16 @@ package pojos;
 
 import java.io.Serializable;
 
-public class User implements Serializable{
+public class User {
 
     private int id;
     public String username;
-    public byte[] password;
+    public String password;
 
-    public User(int id, byte[] password) {
+    public User(int id, String username, String password) {
         this.id = id;
-        this.username =getUsername();//TODO funcion que coja todo lo que esta antes del @ del mail
-        this.password = password; //TODO mas adelante crear encryption
+        this.username =getUsername();
+        this.password = password;
     }
 
     public int  getId() {
@@ -28,10 +28,10 @@ public class User implements Serializable{
         this.username = username;
     }
 
-    public byte[] getPassword() {
+    public String getPassword() {
         return password;
     }
-    public void setPassword(byte[] password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
