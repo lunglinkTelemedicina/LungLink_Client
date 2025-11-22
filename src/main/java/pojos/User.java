@@ -1,6 +1,5 @@
 package pojos;
 
-import java.io.Serializable;
 
 public class User {
 
@@ -8,9 +7,16 @@ public class User {
     public String username;
     public String password;
 
+    public User() {}
+
     public User(int id, String username, String password) {
         this.id = id;
-        this.username =getUsername();
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 

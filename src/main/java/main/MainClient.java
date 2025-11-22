@@ -54,6 +54,7 @@ public class MainClient {
         if (response.contains("NO_CLIENT")) {
 
             System.out.println("No patient profile found. Let's create one.");
+            System.out.println("DEBUG >>> user_id enviado al servidor = " + user.getId());
             client = connection.createClientForUser(user);
 
             if (client == null) {

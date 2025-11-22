@@ -238,8 +238,10 @@ public class ClientConnection {
 
                 System.out.println("Client profile created, ID = " + clientId);
 
+
                 return c;
             }
+
 
             System.out.println("Client creation failed: " + response);
             return null;
