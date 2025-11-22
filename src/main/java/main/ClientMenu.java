@@ -16,12 +16,13 @@ public class ClientMenu {
     private final ClientService service;
     private final BufferedReader reader;
 
-        public ClientMenu(Client client, ClientConnection connection) {
+    public ClientMenu(Client client, ClientConnection connection) {
             this.client = client;
             this.connection = connection;
             this.service = new ClientService();
             this.reader = new BufferedReader(new InputStreamReader(System.in));
-        }
+    }
+
 
         public void displayMenu() {
             boolean exit = false;
