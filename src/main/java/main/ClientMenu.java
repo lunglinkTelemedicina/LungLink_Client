@@ -58,7 +58,6 @@ public class ClientMenu {
                         connection.sendCommand("DISCONECT");
                         connection.receiveResponse();
                         connection.disconnect();
-                        System.out.println("Disconnected from server. \n");
                         exit = true;
                         break;
                     default:

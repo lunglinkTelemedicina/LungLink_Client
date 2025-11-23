@@ -10,7 +10,7 @@ public class MainClient {
 
         ClientConnection connection = new ClientConnection();
 
-        if (!connection.connect("10.61.104.108", 9000)) {
+        if (!connection.connect("10.60.96.17", 9000)) {
             System.out.println("Could not connect to server.");
             return;
         }

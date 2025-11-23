@@ -40,72 +40,40 @@ public class ClientService {
                     break;
             }
             newSymptoms.add(symptom);
-            }
+        }
 
-            // Si el usuario no ha introducido ningún síntoma, salimos del metodo
-            if (newSymptoms.isEmpty()) {
-                System.out.println("No symptoms were added.");
-                return;
-            }
+        // Si el usuario no ha introducido ningún síntoma, salimos del metodo
+        if (newSymptoms.isEmpty()) {
+            System.out.println("No symptoms were added.");
+            return;
+        }
 
-            try {
-                //Coge una lista de Strings y las junta en una única cadena, separadas por comas
-                String symptomsString = String.join(",", newSymptoms);
-                String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + symptomsString;
-                clientConnection.sendCommand(message);
+        try {
+            //Coge una lista de Strings y las junta en una única cadena, separadas por comas
+            String symptomsString = String.join(",", newSymptoms);
+            String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + symptomsString;
+            clientConnection.sendCommand(message);
 
-                String reply = clientConnection.receiveResponse(); //servers response "OK|Symptoms saved"
-                System.out.println("SERVER: " + reply);
+            String reply = clientConnection.receiveResponse(); //servers response "OK|Symptoms saved"
+            System.out.println("SERVER: " + reply);
 
-            }catch (Exception ex) {
-                Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println("Error while sending symptoms.");
-            }
-
-
+        }catch (Exception ex) {
+            Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Error while sending symptoms.");
+        }
     }
-
-//En principio este metodo no lo vamos a usar porque el cliente no deberia de tocar medicalHistory
-//    public void viewResults(Client client){
-//        System.out.println("=== VIEW RESULTS ===");
-//        //Comprobar que el cliente tenga una lista de historiales que no sea null
-//        if(client.getMedicalHistory()== null || client.getMedicalHistory().isEmpty()){
-//            System.out.println("No medical history records were found for this client.");
-//            return;
-//        }
-//
-//        //Si sí tiene historial, recorre cada uno y muestra la info
-//        for (MedicalHistory history : client.getMedicalHistory()) {
-//            System.out.println("Date: " + history.getDate());
-//            System.out.println("Doctor ID: " + history.getDoctorId());
-//            System.out.println("Patient ID: " + history.getClientId());
-//
-//            // Lista de síntomas
-//            if (history.getSymptomsList() != null && !history.getSymptomsList().isEmpty()) {
-//                System.out.println("Symptoms: " + history.getSymptomsList());
-//            } else {
-//                System.out.println("Symptoms: [none]");
-//            }
-//
-//            //Observations and additional data
-//            if(history.getObservations() != null && history.getObservations().isEmpty()){
-//                System.out.println("Observations: " +history.getObservations());
-//            }
-//        }
-//        System.out.println("End of medical history.");
-//    }
 
     public void addExtraInformation(Client client, ClientConnection clientConnection) {
         //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
         // try {
         System.out.println("ADD EXTRA INFORMATION");
+
         double height = UIUtils.readDouble("Enter your height (in cm): ");
         double weight = UIUtils.readDouble("Enter your weight (in kg): ");
 
         String message = CommandType.ADD_EXTRA_INFO.name() + "|" + client.getClientId() + "|" + height + "|" + weight;
 
         clientConnection.sendCommand(message);
-
         String reply = clientConnection.receiveResponse();
 
         if (reply == null) {
@@ -114,8 +82,6 @@ public class ClientService {
         }
 
         System.out.println("SERVER: " + reply); //client must receive form server: "OK|Extra info saved"
-
-
     }
 
     public void sendSignal(Signal signal, ClientConnection conn) {
@@ -200,7 +166,6 @@ public class ClientService {
             System.out.println("An error occurred while retrieving history.");
         }
     }
-
 }
 
     
