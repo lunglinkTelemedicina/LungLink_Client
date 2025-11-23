@@ -22,6 +22,7 @@ public class ClientConnection {
             socket = new Socket(ip, port);
             dataOut = new DataOutputStream(socket.getOutputStream());
             dataIn = new DataInputStream(socket.getInputStream());
+            startListening();
             return true;
 
         }catch(IOException e){
@@ -50,16 +51,7 @@ public class ClientConnection {
 
     public String receiveResponse() {
         try {
-            String msg = dataIn.readUTF();
-
-            if (msg.equals("SERVER_SHUTDOWN")) {
-                System.out.println("\nThe server has been closed. Disconnecting...");
-                releaseResources();
-                System.exit(0);
-            }
-
-            return msg;
-
+            return dataIn.readUTF();
         } catch (IOException e) {
             System.out.println("Lost connection to server.");
             releaseResources();
@@ -275,6 +267,35 @@ public class ClientConnection {
 //    public boolean isConnected(){
 //        return socket != null && socket.isConnected() && !socket.isClosed();
 //    }
+
+    public void startListening() {
+
+        Thread listener = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (true) {
+                        String msg = dataIn.readUTF();
+
+                        if (msg.equals("SERVER_SHUTDOWN")) {
+                            System.out.println("\nThe server has been closed. Disconnecting...");
+                            releaseResources();
+                            System.exit(0);
+                        }
+                    }
+
+                } catch (IOException e) {
+                    System.out.println("\nConnection to server lost. Closing client...");
+                    releaseResources();
+                    System.exit(0);
+                }
+            }
+        });
+
+        listener.setDaemon(true);
+        listener.start();
+    }
+
 
 
 
