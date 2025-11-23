@@ -80,6 +80,25 @@ public class ClientConnection {
             System.out.println("Error sending data from CSV: " + e.getMessage());
         }
     }
+    public void sendSignalFromBITalino(Signal signal) {
+        try {
+            sendCommand("SEND_" + signal.getType().name() + "|" + signal.getClientId() + "|" + signal.getValues().size());
+
+            String response = receiveResponse();
+            if (response == null || !response.equals("Client can send the data")) {
+                System.out.println("Server did not authorize sending data.");
+                return;
+            }
+
+            sendBytes(signal.toByteArray());
+            System.out.println("Signal sent successfully (BITalino).");
+
+        } catch (Exception e) {
+            System.out.println("Error sending BITalino signal: " + e.getMessage());
+        }
+    }
+
+
 
 
     public void disconnect() {
