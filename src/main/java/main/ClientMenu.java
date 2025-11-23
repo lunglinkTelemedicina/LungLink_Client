@@ -3,6 +3,7 @@ package main;
 import network.ClientConnection;
 import network.CommandType;
 import pojos.Client;
+import pojos.TypeSignal;
 import services.ClientService;
 import utils.UIUtils;
 
@@ -37,12 +38,14 @@ public class ClientMenu {
                         break;
 
                     case 2:
-                        // TODO: enviar señal ECG
+                        String ecgPath = UIUtils.readString("Enter ECG CSV file path: ");
+                        connection.sendSignalFromCSV(ecgPath, client.getClientId(), TypeSignal.ECG);
                       //  service.sendSignal(signal, connection);
                         break;
 
                     case 3:
-                        // TODO: enviar señal EMG
+                        String emgPath = UIUtils.readString("Enter EMG CSV file path: ");
+                        connection.sendSignalFromCSV(emgPath, client.getClientId(), TypeSignal.EMG);
                      //   service.sendSignal(signal, connection);
                         break;
 
