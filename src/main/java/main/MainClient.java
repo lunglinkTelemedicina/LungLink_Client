@@ -2,6 +2,7 @@ package main;
 
 import network.ClientConnection;
 import pojos.*;
+import services.ClientService;
 import utils.UIUtils;
 import java.io.IOException;
 
@@ -9,8 +10,9 @@ public class MainClient {
     public static void main(String[] args) throws IOException {
 
         ClientConnection connection = new ClientConnection();
+        ClientService service = new ClientService();
 
-        if (!connection.connect("10.60.96.46", 9000)) {
+        if (!connection.connect("10.60.96.44", 9000)) {
             System.out.println("Could not connect to server.");
             return;
         }
@@ -29,13 +31,17 @@ public class MainClient {
             int option = UIUtils.readInt("Choose an option: ");
 
             switch (option) {
-                case 1 -> user = connection.registerUser();
-                case 2 -> user = connection.loginUser();
-                case 3 -> {
+                case 1:
+                    user = service.registerUser(connection);
+                    break;
+                case 2:
+                    user = service.loginUser(connection);
+                    break;
+                case 3:
                     connection.disconnect();
                     return;
-                }
-                default -> System.out.println("Invalid option.");
+                default:
+                    System.out.println("Invalid option.");
             }
         }
 
@@ -55,7 +61,7 @@ public class MainClient {
 
             System.out.println("No patient profile found. Let's create one.");
             System.out.println("DEBUG >>> user_id enviado al servidor = " + user.getId());
-            client = connection.createClientForUser(user);
+            client = service.createClientForUser(user, connection);
 
             if (client == null) {
                 System.out.println("Error creating client profile.");

@@ -41,13 +41,24 @@ public class ClientConnection {
 
     public String receiveResponse() {
         try {
-            return dataIn.readUTF();
+            String reply = dataIn.readUTF();
+
+            if (reply.equals("SERVER_SHUTDOWN")) {
+                System.out.println("Server is shutting down. Closing client...");
+                releaseResources();
+                System.exit(0);
+            }
+
+            return reply;
+
         } catch (IOException e) {
             System.out.println("Lost connection to server.");
             releaseResources();
+            System.exit(0);
             return null;
         }
     }
+
 
     //Send binary samples (BITalino)
     public void sendBytes(byte[] data){
@@ -131,143 +142,144 @@ public class ClientConnection {
         }
     }
 
-    public User loginUser() {
-        try {
-            System.out.println("\nLOGIN USER");
+//    public User loginUser() {
+//        try {
+//            System.out.println("\nLOGIN USER");
+//
+//            String username = UIUtils.readString("Username: ");
+//            String password = UIUtils.readString("Password: ");
+//
+//            String cmd = "LOGIN_USER|" + username + "|" + password;
+//            sendCommand(cmd);
+//
+//            String response = receiveResponse();
+//            if (response == null) {
+//                System.out.println("No response from server.");
+//                return null;
+//            }
+//
+//            if (response.startsWith("OK|")) {
+//                String[] parts = response.split("\\|");
+//                int id = Integer.parseInt(parts[1]);
+//                String uname = parts[2];
+//
+//                User user = new User(id, uname, password);
+//
+//                System.out.println("User login successful.");
+//
+//                return user;
+//            }
+//
+//            System.out.println("User login failed: " + response);
+//            return null;
+//
+//        } catch (Exception e) {
+//            System.out.println("Error during user login: " + e.getMessage());
+//            return null;
+//        }
+//    }
+//
+//    public User registerUser() {
+//        try {
+//            System.out.println("\nREGISTER USER ACCOUNT");
+//
+//            String username = UIUtils.readString("New username: ");
+//            String password = UIUtils.readString("New password: ");
+//
+//            String cmd = "REGISTER_USER|" + username + "|" + password;
+//            sendCommand(cmd);
+//
+//            String response = receiveResponse();
+//
+//            if (response == null) {
+//                System.out.println("No response from server.");
+//                return null;
+//            }
+//
+//            if (response.startsWith("OK|")) {
+//                int id = Integer.parseInt(response.split("\\|")[1]);
+//
+//                User user = new User(id, username, password);
+//
+//                System.out.println("User account created. Your ID = " + id);
+//                return user;
+//            }
+//
+//            System.out.println("User registration failed: " + response);
+//            return null;
+//
+//        } catch (Exception e) {
+//            System.out.println("Error during registerUser: " + e.getMessage());
+//            return null;
+//        }
+//    }
+//
+//    public Client createClientForUser(User user) {
+//        try {
+//            System.out.println("\nCREATE CLIENT PROFILE");
+//
+//            String name = UIUtils.readString("Name: ");
+//            String surname = UIUtils.readString("Surname: ");
+//
+//            int day = UIUtils.readInt("Birth day (1-31): ");
+//            int month = UIUtils.readInt("Birth month (1-12): ");
+//            int year = UIUtils.readInt("Birth year (YYYY): ");
+//            String dob = day + "-" + month + "-" + year;
+//
+//            System.out.println("Sex:");
+//            System.out.println("1. MALE");
+//            System.out.println("2. FEMALE");
+//            int s = UIUtils.readInt("Choose: ");
+//
+//            String sex = switch (s) {
+//                case 1 -> "MALE";
+//                case 2 -> "FEMALE";
+//                default -> throw new IllegalStateException("Unexpected value: " + s);
+//            };
+//
+//            String mail = UIUtils.readString("Patient email: ");
+//
+//            String cmd = "CREATE_CLIENT|" + user.getId() + "|" +
+//                    name + "|" + surname + "|" +
+//                    dob + "|" + sex + "|" + mail;
+//
+//            sendCommand(cmd);
+//
+//            String response = receiveResponse();
+//
+//            if (response == null) {
+//                System.out.println("No response from server.");
+//                return null;
+//            }
+//
+//            if (response.startsWith("OK|")) {
+//                int clientId = Integer.parseInt(response.split("\\|")[1]);
+//
+//                Client c = new Client();
+//                c.setClientId(clientId);
+//                c.setName(name);
+//                c.setSurname(surname);
+//                c.setMail(mail);
+//                c.setSex(Sex.valueOf(sex));
+//                c.setDob(LocalDate.of(year, month, day));
+//                c.setUserId(user.getId());
+//
+//                System.out.println("Client profile created, ID = " + clientId);
+//
+//
+//                return c;
+//            }
+//
+//
+//            System.out.println("Client creation failed: " + response);
+//            return null;
+//
+//        } catch (Exception e) {
+//            System.out.println("Error creating client: " + e.getMessage());
+//            return null;
+//        }
+//    }
 
-            String username = UIUtils.readString("Username: ");
-            String password = UIUtils.readString("Password: ");
-
-            String cmd = "LOGIN_USER|" + username + "|" + password;
-            sendCommand(cmd);
-
-            String response = receiveResponse();
-            if (response == null) {
-                System.out.println("No response from server.");
-                return null;
-            }
-
-            if (response.startsWith("OK|")) {
-                String[] parts = response.split("\\|");
-                int id = Integer.parseInt(parts[1]);
-                String uname = parts[2];
-
-                User user = new User(id, uname, password);
-
-                System.out.println("User login successful.");
-
-                return user;
-            }
-
-            System.out.println("User login failed: " + response);
-            return null;
-
-        } catch (Exception e) {
-            System.out.println("Error during user login: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public User registerUser() {
-        try {
-            System.out.println("\nREGISTER USER ACCOUNT");
-
-            String username = UIUtils.readString("New username: ");
-            String password = UIUtils.readString("New password: ");
-
-            String cmd = "REGISTER_USER|" + username + "|" + password;
-            sendCommand(cmd);
-
-            String response = receiveResponse();
-
-            if (response == null) {
-                System.out.println("No response from server.");
-                return null;
-            }
-
-            if (response.startsWith("OK|")) {
-                int id = Integer.parseInt(response.split("\\|")[1]);
-
-                User user = new User(id, username, password);
-
-                System.out.println("User account created. Your ID = " + id);
-                return user;
-            }
-
-            System.out.println("User registration failed: " + response);
-            return null;
-
-        } catch (Exception e) {
-            System.out.println("Error during registerUser: " + e.getMessage());
-            return null;
-        }
-    }
-
-    public Client createClientForUser(User user) {
-        try {
-            System.out.println("\nCREATE CLIENT PROFILE");
-
-            String name = UIUtils.readString("Name: ");
-            String surname = UIUtils.readString("Surname: ");
-
-            int day = UIUtils.readInt("Birth day (1-31): ");
-            int month = UIUtils.readInt("Birth month (1-12): ");
-            int year = UIUtils.readInt("Birth year (YYYY): ");
-            String dob = day + "-" + month + "-" + year;
-
-            System.out.println("Sex:");
-            System.out.println("1. MALE");
-            System.out.println("2. FEMALE");
-            int s = UIUtils.readInt("Choose: ");
-
-            String sex = switch (s) {
-                case 1 -> "MALE";
-                case 2 -> "FEMALE";
-                default -> throw new IllegalStateException("Unexpected value: " + s);
-            };
-
-            String mail = UIUtils.readString("Patient email: ");
-
-            String cmd = "CREATE_CLIENT|" + user.getId() + "|" +
-                    name + "|" + surname + "|" +
-                    dob + "|" + sex + "|" + mail;
-
-            sendCommand(cmd);
-
-            String response = receiveResponse();
-
-            if (response == null) {
-                System.out.println("No response from server.");
-                return null;
-            }
-
-            if (response.startsWith("OK|")) {
-                int clientId = Integer.parseInt(response.split("\\|")[1]);
-
-                Client c = new Client();
-                c.setClientId(clientId);
-                c.setName(name);
-                c.setSurname(surname);
-                c.setMail(mail);
-                c.setSex(Sex.valueOf(sex));
-                c.setDob(LocalDate.of(year, month, day));
-                c.setUserId(user.getId());
-
-                System.out.println("Client profile created, ID = " + clientId);
-
-
-                return c;
-            }
-
-
-            System.out.println("Client creation failed: " + response);
-            return null;
-
-        } catch (Exception e) {
-            System.out.println("Error creating client: " + e.getMessage());
-            return null;
-        }
-    }
 
 
 

@@ -7,15 +7,13 @@ package services;
 
 import network.ClientConnection;
 import network.CommandType;
-import pojos.Client;
-import pojos.Signal;
-import pojos.TypeSignal;
+import pojos.*;
 import utils.UIUtils;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.time.LocalDate;
 
 public class ClientService {
 
@@ -148,15 +146,8 @@ public class ClientService {
                 System.out.println("Server error: " + response);
                 return;
             }
-//            // HISTORY|contenido
-//            if (response.startsWith("HISTORY|")) {
-//                String historyBody = response.substring("HISTORY|".length());
-//
-//                System.out.println("\n--- Medical History ---");
-//                System.out.println(historyBody);
-//                System.out.println("------------------------");
-//            }
-                // 4. Display results
+
+            // 4. Display results
             System.out.println("\nMedical History");
             System.out.println(response);
 
@@ -166,6 +157,111 @@ public class ClientService {
             System.out.println("An error occurred while retrieving history.");
         }
     }
+
+    public User loginUser(ClientConnection conn) {
+        System.out.println("\nLOGIN USER");
+
+        String username = UIUtils.readString("Username: ");
+        String password = UIUtils.readString("Password: ");
+
+        String cmd = "LOGIN_USER|" + username + "|" + password;
+        conn.sendCommand(cmd);
+
+        String response = conn.receiveResponse();
+        if (response == null) {
+            System.out.println("No response from server.");
+            return null;
+        }
+
+        if (response.startsWith("OK|")) {
+            String[] parts = response.split("\\|");
+            int id = Integer.parseInt(parts[1]);
+            String uname = parts[2];
+            return new User(id, uname, password);
+        }
+
+        System.out.println("User login failed: " + response);
+        return null;
+    }
+
+    public User registerUser(ClientConnection conn) {
+        System.out.println("\nREGISTER USER");
+
+        String username = UIUtils.readString("New username: ");
+        String password = UIUtils.readString("New password: ");
+
+        String cmd = "REGISTER_USER|" + username + "|" + password;
+        conn.sendCommand(cmd);
+
+        String response = conn.receiveResponse();
+        if (response == null) {
+            System.out.println("No server response");
+            return null;
+        }
+
+        if (response.startsWith("OK|")) {
+            int id = Integer.parseInt(response.split("\\|")[1]);
+            System.out.println("User created. ID = " + id);
+            return new User(id, username, password);
+        }
+
+        System.out.println("Registration failed: " + response);
+        return null;
+    }
+
+    public Client createClientForUser(User user, ClientConnection conn) {
+        System.out.println("\nCREATE CLIENT PROFILE");
+
+        String name = UIUtils.readString("Name: ");
+        String surname = UIUtils.readString("Surname: ");
+
+        int day = UIUtils.readInt("Birth day: ");
+        int month = UIUtils.readInt("Birth month: ");
+        int year = UIUtils.readInt("Birth year: ");
+
+        String dob = day + "-" + month + "-" + year;
+
+        System.out.println("Sex:");
+        System.out.println("1. MALE");
+        System.out.println("2. FEMALE");
+        int s = UIUtils.readInt("Choose: ");
+
+        String sex = (s == 1) ? "MALE" : "FEMALE";
+
+        String mail = UIUtils.readString("Email: ");
+
+        String cmd = "CREATE_CLIENT|" + user.getId() + "|" +
+                name + "|" + surname + "|" + dob + "|" + sex + "|" + mail;
+
+        conn.sendCommand(cmd);
+
+        String response = conn.receiveResponse();
+        if (response == null) {
+            System.out.println("Server not responding.");
+            return null;
+        }
+
+        if (response.startsWith("OK|")) {
+            int clientId = Integer.parseInt(response.split("\\|")[1]);
+
+            Client c = new Client();
+            c.setClientId(clientId);
+            c.setName(name);
+            c.setSurname(surname);
+            c.setMail(mail);
+            c.setSex(Sex.valueOf(sex));
+            c.setDob(LocalDate.of(year, month, day));
+            c.setUserId(user.getId());
+
+            System.out.println("Client profile created. ID = " + clientId);
+
+            return c;
+        }
+
+        System.out.println("Error creating profile: " + response);
+        return null;
+    }
+
 }
 
     
