@@ -55,7 +55,7 @@ public class ClientMenu {
                         break;
 
                     case 6:
-                        connection.sendCommand("DISCONECT");
+                        connection.sendCommand("DISCONNECT");
                         connection.receiveResponse();
                         connection.disconnect();
                         exit = true;

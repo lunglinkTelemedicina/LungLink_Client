@@ -40,13 +40,34 @@ public class ClientConnection {
     }
 
     /* Receive text response*/
-    public String receiveResponse(){
-        try{
-            return dataIn.readUTF();
-        }catch(IOException e){
+//    public String receiveResponse(){
+//        try{
+//            return dataIn.readUTF();
+//        }catch(IOException e){
+//            return null;
+//        }
+//    }
+
+    public String receiveResponse() {
+        try {
+            String msg = dataIn.readUTF();
+
+            if (msg.equals("SERVER_SHUTDOWN")) {
+                System.out.println("\nThe server has been closed. Disconnecting...");
+                releaseResources();
+                System.exit(0);
+            }
+
+            return msg;
+
+        } catch (IOException e) {
+            System.out.println("Lost connection to server.");
+            releaseResources();
+            System.exit(0);
             return null;
         }
     }
+
 
 
     //Send binary samples (BITalino)
