@@ -35,32 +35,38 @@ public class ClientMenu {
                 switch (option) {
                     case 1:
                         service.registerSymptoms(client, connection);
+                        if (connection.receiveResponse() == null) return;
                         break;
 
                     case 2:
                         String ecgPath = UIUtils.readString("Enter ECG CSV file path: ");
                         connection.sendSignalFromCSV(ecgPath, client.getClientId(), TypeSignal.ECG);
                       //  service.sendSignal(signal, connection);
+                        if (connection.receiveResponse() == null) return;
                         break;
 
                     case 3:
                         String emgPath = UIUtils.readString("Enter EMG CSV file path: ");
                         connection.sendSignalFromCSV(emgPath, client.getClientId(), TypeSignal.EMG);
                      //   service.sendSignal(signal, connection);
+                        if (connection.receiveResponse() == null) return;
                         break;
 
                     case 4:
                         service.viewHistory(client, connection);
+                        if (connection.receiveResponse() == null) return;
                         break;
 
                     case 5:
                         service.addExtraInformation(client, connection);
+                        if (connection.receiveResponse() == null) return;
                         break;
 
                     case 6:
                         connection.sendCommand("DISCONNECT");
                         connection.receiveResponse();
                         connection.disconnect();
+                        if (connection.receiveResponse() == null) return;
                         exit = true;
                         break;
                     default:
