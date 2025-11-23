@@ -186,7 +186,7 @@ public class ClientConnection {
 
     public Client createClientForUser(User user) {
         try {
-            System.out.println("\n--- CREATE CLIENT PROFILE ---");
+            System.out.println("\nCREATE CLIENT PROFILE");
 
             String name = UIUtils.readString("Name: ");
             String surname = UIUtils.readString("Surname: ");
@@ -250,20 +250,9 @@ public class ClientConnection {
         }
     }
 
-//    public Client loginUserAndLoadClient() {
-//        User user = loginUser();
-//        if (user == null) return null;
-//
-//        String response = receiveResponse();
-//
-//        if (response.startsWith("OK|") && response.contains("NO_CLIENT")) {
-//            // primera vez → pedir datos personales del paciente
-//            return createClientForUser(user);
-//        }
-//
-//        // Si viene un cliente ya registrado:
-//        // OK|userId|clientId|name|surname|dob|sex|mail
-//        return parseClientFromLoginResponse(response);
+
+//    public boolean isConnected(){
+//        return socket != null && socket.isConnected() && !socket.isClosed();
 //    }
 
 
