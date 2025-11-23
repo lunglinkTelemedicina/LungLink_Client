@@ -54,12 +54,13 @@ public class ClientMenu {
                         service.addExtraInformation(client, connection);
                         break;
 
-                    case 6: {
+                    case 6:
+                        connection.sendCommand("DISCONECT");
+                        connection.receiveResponse();
                         connection.disconnect();
                         System.out.println("Disconnected from server. \n");
                         exit = true;
                         break;
-                    }
                     default:
                         System.out.println("Invalid option, please try again.");
                         break;

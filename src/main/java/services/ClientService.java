@@ -25,19 +25,6 @@ public class ClientService {
      * que guarda los síntomas escritos por el usuario junto con la fecha actual.
      */
 
-    /**
-     * El paciente (CLIENTE) rellena los síntomas.
-     * Esos síntomas SE ENVIAN al servidor.
-     * El servidor los guarda en la historia clínica (archivo o BD).
-     *
-     * Lo único que he hecho es añadir:
-     * El envío del comando "SEND_SYMPTOMS"
-     * El envío de cada síntoma por el socket
-     * El envío del “END” para cerrar el bloque
-     * La lectura de respuesta del servidor
-     * */
-
-
     public void registerSymptoms(Client client, ClientConnection clientConnection) {
 
         System.out.println("REGISTER SYMPTOMS");
