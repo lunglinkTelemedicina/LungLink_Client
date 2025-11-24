@@ -5,6 +5,7 @@ import network.CommandType;
 import pojos.*;
 import utils.UIUtils;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 
 public class ClientService {
 
-    public void registerSymptoms(Client client, ClientConnection clientConnection) {
+    public void registerSymptoms(Client client, ClientConnection clientConnection) throws IOException {
 
         System.out.println("REGISTER SYMPTOMS");
         System.out.println("Please enter your symptoms one by one.");
@@ -35,22 +36,27 @@ public class ClientService {
             return;
         }
 
-        try {
             // It takes a list of strings and joins them into one single string, separated by commas
             String symptomsString = String.join(",", newSymptoms);
             String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + symptomsString;
             clientConnection.sendCommand(message);
 
             String reply = clientConnection.receiveResponse(); //servers response "OK|Symptoms saved"
-            System.out.println("SERVER: " + reply);
+            if (reply == null) {//esto lanza un error de comunicacion o de red
+            throw new IOException("No response from server after sending symptoms.");
+            }
 
-        }catch (Exception ex) {
-            Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Error while sending symptoms.");
-        }
+            if (reply.startsWith("ERROR|")) {//error en la aplicacion
+            throw new IOException("Server application error: " + reply.split("\\|")[1]);
+            }
+
+            System.out.println("SERVER: " + reply);
     }
 
-    public void addExtraInformation(Client client, ClientConnection clientConnection) {
+
+
+
+    public void addExtraInformation(Client client, ClientConnection clientConnection) throws IOException {
         System.out.println("ADD EXTRA INFORMATION");
 
         double height = UIUtils.readDouble("Enter your height (in cm): ");
@@ -62,8 +68,10 @@ public class ClientService {
         String reply = clientConnection.receiveResponse();
 
         if (reply == null) {
-            System.out.println("No response from server.");
-            return;
+            throw new IOException("No response from server after sending extra info"+reply.split("\\|")[1]);
+        }
+        if(reply.startsWith("ERROR|")) {
+            throw new IOException("Server application error while saving extra info: "+reply.split("\\|")[1]);
         }
 
         System.out.println("SERVER: " + reply); //client must receive form server: "OK|Extra info saved"
@@ -106,15 +114,15 @@ public class ClientService {
 
 
         } catch (Exception e) {
+            Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, e);
             System.out.println("Error sending signal: " + e.getMessage());
         }
     }
 
 
-    public void viewHistory(Client client, ClientConnection clientConnection) {
+    public void viewHistory(Client client, ClientConnection clientConnection) throws IOException {
         System.out.println("VIEW MEDICAL HISTORY");
 
-        try {
             // 1. Send the command to the server
             String command = CommandType.GET_HISTORY.name() + "|" + client.getClientId();
             clientConnection.sendCommand(command);
@@ -123,28 +131,21 @@ public class ClientService {
             String response = clientConnection.receiveResponse();
 
             if (response == null) {
-                System.out.println("No response received from the server.");
-                return;
+                throw new IOException("No response from server after getting history.");
             }
 
             // 3. Check if server returned an error message
             if (response.startsWith("ERROR")) {
-                System.out.println("Server error: " + response);
-                return;
+                throw new IOException("Server application error retrieving history"+response.split("\\|")[1]);
             }
 
             // 4. Display results
             System.out.println("\nMedical History");
             System.out.println(response);
 
-
-        } catch (Exception ex) {
-            Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("An error occurred while retrieving history.");
-        }
     }
 
-    public User loginUser(ClientConnection conn) {
+    public User loginUser(ClientConnection conn) throws IOException {
         System.out.println("\nLOGIN USER");
 
         String username = UIUtils.readString("Username: ");
@@ -155,22 +156,23 @@ public class ClientService {
 
         String response = conn.receiveResponse();
         if (response == null) {
-            System.out.println("No response from server.");
-            return null;
+            throw new IOException("No response from server after login user.");
         }
 
         if (response.startsWith("OK|")) {
-            String[] parts = response.split("\\|");
-            int id = Integer.parseInt(parts[1]);
-            String uname = parts[2];
-            return new User(id, uname, password);
+            try {
+                String[] parts = response.split("\\|");
+                int id = Integer.parseInt(parts[1]);
+                String uname = parts[2];
+                return new User(id, uname, password);
+            }catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                throw new IOException("Invalid server response format during login: " + response + ". " + e.getMessage(), e);
+            }
         }
-
-        System.out.println("User login failed: " + response);
-        return null;
+        throw new IOException("User login failed: " + response);
     }
 
-    public User registerUser(ClientConnection conn) {
+    public User registerUser(ClientConnection conn) throws IOException {
         System.out.println("\nREGISTER USER");
 
         String username = UIUtils.readString("New username: ");
@@ -181,21 +183,23 @@ public class ClientService {
 
         String response = conn.receiveResponse();
         if (response == null) {
-            System.out.println("No server response");
-            return null;
+           throw new IOException("No server response");
         }
 
         if (response.startsWith("OK|")) {
-            int id = Integer.parseInt(response.split("\\|")[1]);
-            System.out.println("User created. ID = " + id);
-            return new User(id, username, password);
+            try {
+                int id = Integer.parseInt(response.split("\\|")[1]);
+                System.out.println("User created. ID = " + id);
+                return new User(id, username, password);
+            }catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                throw new IOException("Invalid server response format during register user: " + response + ". " + e.getMessage(), e);
+            }
         }
+        throw new IOException("Registration failed: " + response);
 
-        System.out.println("Registration failed: " + response);
-        return null;
     }
 
-    public Client createClientForUser(User user, ClientConnection conn) {
+    public Client createClientForUser(User user, ClientConnection conn) throws IOException {
         System.out.println("\nCREATE CLIENT PROFILE");
 
         String name = UIUtils.readString("Name: ");
@@ -223,29 +227,30 @@ public class ClientService {
 
         String response = conn.receiveResponse();
         if (response == null) {
-            System.out.println("Server not responding.");
-            return null;
+            throw new IOException("Server not responding during creation");
         }
 
         if (response.startsWith("OK|")) {
-            int clientId = Integer.parseInt(response.split("\\|")[1]);
+            try {
+                int clientId = Integer.parseInt(response.split("\\|")[1]);
 
-            Client c = new Client();
-            c.setClientId(clientId);
-            c.setName(name);
-            c.setSurname(surname);
-            c.setMail(mail);
-            c.setSex(Sex.valueOf(sex));
-            c.setDob(LocalDate.of(year, month, day));
-            c.setUserId(user.getId());
+                Client c = new Client();
+                c.setClientId(clientId);
+                c.setName(name);
+                c.setSurname(surname);
+                c.setMail(mail);
+                c.setSex(Sex.valueOf(sex));
+                c.setDob(LocalDate.of(year, month, day));
+                c.setUserId(user.getId());
 
-            System.out.println("Client profile created. ID = " + clientId);
+                System.out.println("Client profile created. ID = " + clientId);
 
-            return c;
+                return c;
+            }catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                throw new IOException("Invalid server response format during creation: " + response + ". " + e.getMessage(), e);
+            }
         }
-
-        System.out.println("Error creating profile: " + response);
-        return null;
+        throw new IOException("Error creating profile:" + response);
     }
 
 }

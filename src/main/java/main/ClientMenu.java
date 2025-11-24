@@ -29,40 +29,44 @@ public class ClientMenu {
             while (!exit) {
                 showMenu();
                 int option = UIUtils.readInt("Choose an option: ");
+                try {
 
-                switch (option) {
-                    case 1:
-                        service.registerSymptoms(client, connection);
-                        break;
+                    switch (option) {
+                        case 1:
+                            service.registerSymptoms(client, connection);
+                            break;
 
-                    case 2:
-//                        String ecgPath = UIUtils.readString("Enter ECG CSV file path: ");
-//                        connection.sendSignalFromCSV(ecgPath, client.getClientId(), TypeSignal.ECG);
-                        new BitalinoDemo().acquireECGfromBITalino(connection, client.getClientId());
-                        break;
+                        case 2:
+                            //                        String ecgPath = UIUtils.readString("Enter ECG CSV file path: ");
+                            //                        connection.sendSignalFromCSV(ecgPath, client.getClientId(), TypeSignal.ECG);
+                            new BitalinoDemo().acquireECGfromBITalino(connection, client.getClientId());
+                            break;
 
-                    case 3:
-//                        String emgPath = UIUtils.readString("Enter EMG CSV file path: ");
-//                        connection.sendSignalFromCSV(emgPath, client.getClientId(), TypeSignal.EMG);
-                        new BitalinoDemo().acquireEMGfromBITalino(connection, client.getClientId());
-                        break;
+                        case 3:
+                            //                        String emgPath = UIUtils.readString("Enter EMG CSV file path: ");
+                            //                        connection.sendSignalFromCSV(emgPath, client.getClientId(), TypeSignal.EMG);
+                            new BitalinoDemo().acquireEMGfromBITalino(connection, client.getClientId());
+                            break;
 
-                    case 4:
-                        service.viewHistory(client, connection);
-                        break;
+                        case 4:
+                            service.viewHistory(client, connection);
+                            break;
 
-                    case 5:
-                        service.addExtraInformation(client, connection);
-                        break;
+                        case 5:
+                            service.addExtraInformation(client, connection);
+                            break;
 
-                    case 6:
-                        connection.sendCommand("DISCONNECT");
-                        connection.disconnect();
-                        exit = true;
-                        break;
-                    default:
-                        System.out.println("Invalid option, please try again.");
-                        break;
+                        case 6:
+                            connection.sendCommand("DISCONNECT");
+                            connection.disconnect();
+                            exit = true;
+                            break;
+                        default:
+                            System.out.println("Invalid option, please try again.");
+                            break;
+                    }
+                }catch (Exception e) {
+                    System.err.println("operation failed"+ e.getMessage());
                 }
             }
         }

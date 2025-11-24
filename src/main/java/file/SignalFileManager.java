@@ -15,7 +15,13 @@ public class SignalFileManager {
         String line=br.readLine();
         if(line!=null){
             for(String p: line.split(",")){
-                if(!p.isBlank()) signal.addSample(Integer.parseInt(p.trim()));
+                if(!p.isBlank()) {
+                    try{
+                        signal.addSample(Integer.parseInt(p.trim()));
+                    }catch(NumberFormatException e){
+                        throw new IOException("CSV file corrupted. Expected integer, found: "+p.trim(), e);
+                    }
+                }
             }
         }
         br.close();
