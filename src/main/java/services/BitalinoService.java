@@ -25,14 +25,14 @@ public class BitalinoService{
         try {
             bitalino = new BITalino();
 
-            // Opcional: encontrar dispositivos
+            // Optional: to find devices
             Vector<RemoteDevice> devices = bitalino.findDevices();
             System.out.println("Devices: " + devices);
 
-            // Abrir conexión
+            //Open connection
             bitalino.open(macAddress, samplingRate);
 
-            // Seleccionar canal
+            //Select channel
             int channel = (type == TypeSignal.ECG) ? 1 : 5;
             int[] channels = { channel };
 

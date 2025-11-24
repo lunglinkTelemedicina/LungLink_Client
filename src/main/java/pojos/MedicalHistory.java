@@ -6,13 +6,13 @@ import java.util.List;
 
 public class MedicalHistory {
 
-    private String recordId;          // identificador único del historial
-    private LocalDate date;        // fecha de la medición o visita
+    private String recordId;
+    private LocalDate date;
     private int clientId;
     private int doctorId;
     private Signal signalEMG;
     private Signal signalECG;
-    private String observations;          // observaciones médicas o comentarios
+    private String observations;
     private List<String> symptomsList;
 
     public MedicalHistory() {
@@ -33,7 +33,7 @@ public class MedicalHistory {
         this.date = LocalDate.now();
         this.clientId = clientId;
         this.doctorId = doctorId;
-        this.observations = ""; // se deja vacío por defecto
+        this.observations = "";
         this.symptomsList = new ArrayList<>();
     }
     public String getRecordId() {

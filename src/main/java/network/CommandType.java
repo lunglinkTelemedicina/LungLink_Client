@@ -1,6 +1,6 @@
 package network;
 
-//No es un pojo. No es un dato, es parte del protocolo de comunicación entre clietne y servidor
+//Not a POJO. It is part of the client-server protocol, not a data object
 public enum CommandType {
     SEND_SYMPTOMS,
     ADD_EXTRA_INFO,
@@ -11,7 +11,7 @@ public enum CommandType {
     DISCONNECT,
     UNKNOWN;
 
-    //Convierte el string en enum
+    //Converts from string to an enum
     public static CommandType fromString(String s) {
         try {
             return CommandType.valueOf(s);

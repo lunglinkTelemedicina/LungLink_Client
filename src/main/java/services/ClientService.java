@@ -1,10 +1,5 @@
 package services;
 
-//TODO probar que funciona bien
-
-//En esta clase están las funciones que un cliente (paciente)
-// puede hacer, como registrar síntomas, ver resultados, etc.
-
 import network.ClientConnection;
 import network.CommandType;
 import pojos.*;
@@ -16,12 +11,6 @@ import java.util.logging.Logger;
 import java.time.LocalDate;
 
 public class ClientService {
-
-    /**
-     * Este metodo permite registrar síntomas para un cliente concreto.
-     * Cada vez que se ejecuta, se crea un nuevo objeto MedicalHistory
-     * que guarda los síntomas escritos por el usuario junto con la fecha actual.
-     */
 
     public void registerSymptoms(Client client, ClientConnection clientConnection) {
 
@@ -40,14 +29,14 @@ public class ClientService {
             newSymptoms.add(symptom);
         }
 
-        // Si el usuario no ha introducido ningún síntoma, salimos del metodo
+        //If the user did not enter any symptoms, we exit the method
         if (newSymptoms.isEmpty()) {
             System.out.println("No symptoms were added.");
             return;
         }
 
         try {
-            //Coge una lista de Strings y las junta en una única cadena, separadas por comas
+            // It takes a list of strings and joins them into one single string, separated by commas
             String symptomsString = String.join(",", newSymptoms);
             String message = CommandType.SEND_SYMPTOMS.name()+ "|" + client.getClientId() + "|" + symptomsString;
             clientConnection.sendCommand(message);
@@ -62,8 +51,6 @@ public class ClientService {
     }
 
     public void addExtraInformation(Client client, ClientConnection clientConnection) {
-        //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
-        // try {
         System.out.println("ADD EXTRA INFORMATION");
 
         double height = UIUtils.readDouble("Enter your height (in cm): ");
@@ -96,22 +83,21 @@ public class ClientService {
                     ? CommandType.SEND_ECG.name()
                     : CommandType.SEND_EMG.name();
 
-            // Cabecera: comando | clientId | numberOfSamples
             String header = command + "|" + signal.getClientId() + "|" + values.size();
             conn.sendCommand(header);
 
-            // Leer confirmación del servidor (si la envía)
+            //Read confirmation from the server (if it sends one)
             String reply = conn.receiveResponse();
             if (reply != null) {
                 System.out.println("SERVER: " + reply);
                 return;
             }
 
-            // Datos binarios: enviar bytes de la señal
+            //Send the signals as bytes
             byte[] data = signal.toByteArray();
             conn.sendBytes(data);
 
-            // Recibir confirmación
+            //Receive confirmation
             String finalReply = conn.receiveResponse();
             System.out.println("SERVER: " + finalReply);
 
@@ -126,7 +112,7 @@ public class ClientService {
 
 
     public void viewHistory(Client client, ClientConnection clientConnection) {
-        System.out.println("=== VIEW MEDICAL HISTORY ===");
+        System.out.println("VIEW MEDICAL HISTORY");
 
         try {
             // 1. Send the command to the server

@@ -5,10 +5,10 @@ import java.util.List;
 
 public class Signal {
 
-    private TypeSignal type;         // ECG o EMG
-    private int clientId;            // Paciente
-    private int recordId;            // (solo servidor lo usa)
-    private List<Integer> values;    // Muestras de la señal
+    private TypeSignal type;         // ECG or EMG
+    private int clientId;            // Patient
+    private int recordId;            // Used only by the server
+    private List<Integer> values;    // Signal samples
 
     public Signal() {
         this.values = new ArrayList<>();
@@ -66,8 +66,8 @@ public class Signal {
 
         for (int v : values) {
             short s = (short) v;
-            data[pos++] = (byte) (s >> 8);   // byte alto
-            data[pos++] = (byte) s;          // byte bajo
+            data[pos++] = (byte) (s >> 8);   // high byte
+            data[pos++] = (byte) s;          // low byte
         }
         return data;
     }
