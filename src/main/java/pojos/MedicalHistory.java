@@ -100,24 +100,17 @@ public class MedicalHistory {
         this.symptomsList = symptomsList;
     }
 
-    /*
-    TODO ESTE METODO TIENE QUE IR A UNA CLASE DE SERVICIO DEL SERVIDOR
-
-    public void recordSignals(){
-        System.out.println("elige si queires ECG o EMG");
-        //switch
-        //TODO el resto
-    }*/
-
-    /*
     @Override
     public String toString() {
         return "MedicalHistory{" +
-                "clientName='" + clientName + '\'' +
-                ", clientSurname='" + clientSurname + '\'' +
-                ", age=" + dob +
-                ", height=" + height +
-                ", weight=" + weight +
+                "recordId='" + recordId + '\'' +
+                ", date=" + date +
+                ", clientId=" + clientId +
+                ", doctorId=" + doctorId +
+                ", signalEMG=" + signalEMG +
+                ", signalECG=" + signalECG +
+                ", observations='" + observations + '\'' +
+                ", symptomsList=" + symptomsList +
                 '}';
-    }*/
+    }
 }

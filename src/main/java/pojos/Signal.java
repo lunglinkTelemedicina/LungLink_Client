@@ -20,9 +20,6 @@ public class Signal {
         this.values = new ArrayList<>();
     }
 
-    // ------------------------------
-    // GETTERS / SETTERS
-    // ------------------------------
 
     public TypeSignal getType() {
         return type;
@@ -61,7 +58,6 @@ public class Signal {
     }
 
 
-    // BYTE ARRAY -> Para enviar señal al servidor
 
 
     public byte[] toByteArray() {
