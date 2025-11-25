@@ -96,9 +96,11 @@ public class ClientService {
 
             //Read confirmation from the server (if it sends one)
             String reply = conn.receiveResponse();
-            if (reply != null) {
+            if (reply != null && reply.startsWith("OK|Client can send data")) {
                 System.out.println("SERVER: " + reply);
-                return;
+            } else if (reply != null) {
+                // unexpected but we DO NOT return, we continue
+                System.out.println("SERVER (unexpected): " + reply);
             }
 
             //Send the signals as bytes
