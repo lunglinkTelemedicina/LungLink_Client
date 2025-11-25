@@ -79,7 +79,7 @@ public class ClientConnection {
             sendCommand("SEND_" + type.name() + "|" + clientId + "|" + signal.getValues().size());
 
             String response = receiveResponse();
-            if (response == null || !response.equals("Client can send the data")) {
+            if (response == null || !response.contains("Client can send the data")) {
                 System.out.println("Server did not authorize sending data.");
                 return;
             }
@@ -96,7 +96,7 @@ public class ClientConnection {
             sendCommand("SEND_" + signal.getType().name() + "|" + signal.getClientId() + "|" + signal.getValues().size());
 
             String response = receiveResponse();
-            if (response == null || !response.equals("Client can send the data")) {
+            if (response == null || !response.contains("Client can send the data")) {
                 System.out.println("Server did not authorize sending data.");
                 return;
             }
@@ -279,11 +279,5 @@ public class ClientConnection {
 //            return null;
 //        }
 //    }
-
-
-
-
-
-
 
 }
