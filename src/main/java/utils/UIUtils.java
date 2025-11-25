@@ -20,11 +20,9 @@ public class UIUtils {
                 return Integer.parseInt(input.trim());
 
             } catch (IOException ex) {
-                Logger.getLogger(UIUtils.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Error reading input. Try again.");
 
             } catch (NumberFormatException ex) {
-                Logger.getLogger(UIUtils.class.getName()).log(Level.WARNING, null, ex);
                 System.out.println("Please enter a valid number.");
             }
         }
@@ -39,7 +37,6 @@ public class UIUtils {
                     return input.trim();
                 }
             } catch (IOException ex) {
-                Logger.getLogger(UIUtils.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Error reading input. Try again.");
             }
         }
@@ -54,11 +51,9 @@ public class UIUtils {
                 return Double.parseDouble(input.trim());
 
             } catch (IOException ex) {
-                Logger.getLogger(UIUtils.class.getName()).log(Level.SEVERE, null, ex);
                 System.out.println("Error reading input. Try again.");
 
             } catch (NumberFormatException ex) {
-                Logger.getLogger(UIUtils.class.getName()).log(Level.WARNING, null, ex);
                 System.out.println("Please enter a valid number.");
             }
         }
