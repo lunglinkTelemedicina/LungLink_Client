@@ -85,6 +85,12 @@ public class ClientConnection {
             }
 
             sendBytes(signal.toByteArray());
+
+            //he añadido esto 26/11/2025
+            String finalResponse = receiveResponse();
+            System.out.println("Server final response: " + finalResponse);
+            //hasta aqui
+
             System.out.println("Signal sent successfully from CSV.");
 
         } catch (IOException e) {
@@ -102,6 +108,12 @@ public class ClientConnection {
             }
 
             sendBytes(signal.toByteArray());
+
+            //he añadido esto 26/11/2025
+            String finalResponse = receiveResponse();
+            System.out.println("Server final response: " + finalResponse);
+            //hasta aqui
+
             System.out.println("Signal sent successfully (BITalino).");
 
         } catch (Exception e) {
