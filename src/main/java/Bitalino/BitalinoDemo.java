@@ -5,23 +5,59 @@ import pojos.Signal;
 import pojos.TypeSignal;
 import utils.UIUtils;     // PARA LEER LA MAC DESDE TERMINAL
 
+import javax.bluetooth.RemoteDevice;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class BitalinoDemo {
 
-    private static final int SAMPLING_RATE = 100;
+    private static final int SAMPLING_RATE = 100; // 100 muestras/segundo
     private static final int NUM_SAMPLES = 200;
 
 
     private BITalino connectToBitalino() throws Exception {
 
         System.out.println("BITalino Connection");
+        System.out.println("...Automatic Bluetooth search...");
 
-        // PEDIR LA MAC AL USUARIO
-        String mac = UIUtils.readString("Enter BITalino MAC Address (Ej: 98:D3:41:FD:4E:E8): ");
-        mac = mac.trim();
         BITalino device = new BITalino();
+
+        Vector<RemoteDevice> found = null;
+
+        try {
+            found = device.findDevices();
+        } catch (Exception e) {
+            System.out.println("Bluetooth search failed. Will ask for MAC manually.");
+        }
+
+        // Si encuentra el dispositivo, entonces:
+        if (found != null && !found.isEmpty()) {
+
+            System.out.println("BITalino devices found:");
+            int index = 1;
+            for (RemoteDevice dev : found) {
+                System.out.println(index + ") " + dev.getBluetoothAddress());
+                index++;
+            }
+
+            int choice = UIUtils.readInt("Select device number: ");
+            RemoteDevice selected = found.get(choice - 1);
+
+            String mac = selected.getBluetoothAddress();
+
+            System.out.println("Connecting to BITalino at MAC: " + mac);
+            device.open(mac, SAMPLING_RATE);
+
+            return device;
+        }
+
+        // Si no lo encuentra, entonces introduce la MAC
+        System.out.println("No BITalino detected automatically.");
+        System.out.println("Please enter the MAC address manually.");
+
+        String mac = UIUtils.readString("Enter BITalino MAC (Ej: 98:D3:41:FD:4E:E8): ");
+        mac = mac.trim();
 
         System.out.println("Connecting to BITalino at MAC: " + mac);
         device.open(mac, SAMPLING_RATE);
@@ -32,16 +68,16 @@ public class BitalinoDemo {
     public void acquireECGfromBITalino(ClientConnection connection, int clientId) {
 
         try {
-            // 1. Conectar BITalino
+            // Conectar BITalino
             BITalino device = connectToBitalino();
 
-            // 2. Canal ECG = canal físico 2 → índice interno 2
+            // ECG = canal físico 2 -> indice 1
             int[] channelsToAcquire = {1};
             device.start(channelsToAcquire);
 
             List<Integer> samples = new ArrayList<>();
 
-            // 3. Leer 200 muestras
+            // Lee 200 muestras
             int remaining = NUM_SAMPLES;
             while (remaining > 0) {
 
@@ -54,11 +90,11 @@ public class BitalinoDemo {
                 remaining -= frames.length;
             }
 
-            // 4. Parar
+            // Para
             device.stop();
             device.close();
 
-            // 5. Crear señal para el servidor
+            // Crea la señal para el servidor
             Signal s = new Signal(TypeSignal.ECG, clientId);
             samples.forEach(s::addSample);
 
@@ -79,16 +115,16 @@ public class BitalinoDemo {
         try {
             BITalino device = connectToBitalino();
 
-            // EMG = canal físico 1
+            // EMG = canal físico 1 -> indice 0
             int[] channelsToAcquire = {0};
             device.start(channelsToAcquire);
 
             List<Integer> samples = new ArrayList<>();
 
             int remaining = NUM_SAMPLES;
-            while (remaining > 0) {
+            while (remaining > 0) { //lee de 10 en 10 frames hasta llegar a 200 muestras
 
-                Frame[] frames = device.read(Math.min(10, remaining));
+                Frame[] frames = device.read(Math.min(10, remaining)); //lee en bloques de 10, cada frame es una muestra
 
                 for (Frame f : frames) {
                     samples.add(f.analog[0]);
