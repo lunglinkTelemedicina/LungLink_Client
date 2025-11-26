@@ -220,16 +220,35 @@ public class ClientService {
 
         String sex = (s == 1) ? "MALE" : "FEMALE";
 
-        String mail = UIUtils.readString("Email: ");
+        String mail = null;
+        String response = null;
+        boolean emailValid = false;
 
-        String cmd = "CREATE_CLIENT|" + user.getId() + "|" +
-                name + "|" + surname + "|" + dob + "|" + sex + "|" + mail;
+        // Bucle para validar unicidad y formato del email
+        while (!emailValid) {
+            mail = UIUtils.readString("Email: ");
 
-        conn.sendCommand(cmd);
 
-        String response = conn.receiveResponse();
-        if (response == null) {
-            throw new IOException("Server not responding during creation");
+            if (!mail.contains("@")) {
+                System.out.println("ERROR: Invalid email format. Must contain '@'.");
+
+                continue;
+            }
+
+            String cmd = "CREATE_CLIENT|" + user.getId() + "|" +
+                    name + "|" + surname + "|" + dob + "|" + sex + "|" + mail;
+
+            conn.sendCommand(cmd);
+            response = conn.receiveResponse();
+
+            if (response == null) {
+                throw new IOException("Server not responding during creation");
+            }
+            if (response.equals("ERROR|Email already in use")) {
+                System.out.println("ERROR: The email is already in use. Please enter a different email.");
+            } else {
+                emailValid = true;
+            }
         }
 
         if (response.startsWith("OK|")) {
@@ -248,7 +267,7 @@ public class ClientService {
                 System.out.println("Client profile created. ID = " + clientId);
 
                 return c;
-            }catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
                 throw new IOException("Invalid server response format during creation: " + response + ". " + e.getMessage(), e);
             }
         }
