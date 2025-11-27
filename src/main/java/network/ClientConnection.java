@@ -49,14 +49,11 @@ public class ClientConnection {
 
 
     //Send binary samples (BITalino)
-    public void sendBytes(byte[] data){
-        try{
+    public void sendBytes(byte[] data)throws IOException{
             dataOut.writeInt(data.length);
             dataOut.write(data);
             dataOut.flush();
-        }catch(IOException e){
-            System.out.println("Error sending bytes." + e.getMessage());
-        }
+
     }
 //
 //    public void sendSignalFromCSV(String filePath, int clientId, TypeSignal type){
@@ -85,7 +82,7 @@ public class ClientConnection {
 //            System.out.println("Error sending data from CSV: " + e.getMessage());
 //        }
 //    }
-    public void sendSignalFromBITalino(Signal signal) {
+    public void sendSignalFromBITalino(Signal signal) throws IOException{
         try {
             sendCommand("SEND_" + signal.getType().name() + "|" + signal.getClientId() + "|" + signal.getValues().size());
 
