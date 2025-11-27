@@ -29,17 +29,13 @@ public class ClientConnection {
         }
     }
 
-    public void sendCommand(String msg){
-        try{
+    public void sendCommand(String msg)throws IOException{
             dataOut.writeUTF(msg);
             dataOut.flush();
-        }catch(IOException e){
-            System.out.println("Send failed." + e.getMessage());
-        }
+
     }
 
-    public String receiveResponse() {
-        try {
+    public String receiveResponse()throws IOException {
             String reply = dataIn.readUTF();
 
             if (reply.equals("SERVER_SHUTDOWN")) {
@@ -49,13 +45,6 @@ public class ClientConnection {
             }
 
             return reply;
-
-        } catch (IOException e) {
-            System.out.println("Lost connection to server.");
-            releaseResources();
-            System.exit(0);
-            return null;
-        }
     }
 
 
@@ -123,7 +112,7 @@ public class ClientConnection {
 
 
 
-    public void disconnect() {
+    public void disconnect() throws IOException{
         sendCommand("DISCONNECT");
         releaseResources();
         System.out.println("Disconnected from server.");

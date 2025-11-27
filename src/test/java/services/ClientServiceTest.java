@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import java.io.IOException;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*; // Usado solo para mockStatic y anyString/anyInt
@@ -96,8 +97,7 @@ class ClientServiceTest {
         double height = 180.5;
         double weight = 75.2;
         String serverReply = "OK|Extra info saved";
-        String expectedCommand = String.format("ADD_EXTRA_INFO|%d|%.1f|%.1f", CLIENT_ID, height, weight);
-
+        String expectedCommand = String.format(Locale.US, "ADD_EXTRA_INFO|%d|%.1f|%.1f", CLIENT_ID, height, weight);
         try (MockedStatic<UIUtils> mockedUIUtils = mockStatic(UIUtils.class)) {
             mockedUIUtils.when(() -> UIUtils.readDouble(anyString()))
                     .thenReturn(height)
