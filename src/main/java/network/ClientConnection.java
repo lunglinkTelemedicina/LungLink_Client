@@ -110,7 +110,12 @@ public class ClientConnection {
 
 
     public void disconnect() throws IOException{
-        sendCommand("DISCONNECT");
+        try {
+            sendCommand("DISCONNECT");
+        }catch (IOException ignored){
+            // Ignoramos el error de I/O aquí (Connection reset by peer)
+            // porque el propósito es solo limpiar los recursos, no enviar un mensaje.
+        }
         releaseResources();
         System.out.println("Disconnected from server.");
     }
