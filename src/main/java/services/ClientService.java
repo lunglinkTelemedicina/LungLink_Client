@@ -208,12 +208,10 @@ public class ClientService {
         String surname = UIUtils.readString("Surname: ");
 
         String dob;
-        int day;
-        int month;
-        int year;
+        int day,month, year;
         while(true) {
             try {
-
+                System.out.println("\n--- Enter Date of Birth ---");
                 day = UIUtils.readInt("Birth day: ");
                 month = UIUtils.readInt("Birth month: ");
                 year = UIUtils.readInt("Birth year: ");
@@ -222,7 +220,8 @@ public class ClientService {
                 break;
 
             } catch (java.time.DateTimeException e) {
-                System.err.println("ERROR: Invalid date entered" + e.getLocalizedMessage() + " Please re-enter the date");
+                System.err.println("ERROR: Invalid date entered" + e.getLocalizedMessage() );
+
             }
         }
 

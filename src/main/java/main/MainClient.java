@@ -12,9 +12,19 @@ public class MainClient {
         ClientConnection connection = new ClientConnection();
         ClientService service = new ClientService();
 
-        if (!connection.connect("10.60.115.142", 9000)) {
-            System.out.println("Could not connect to server.");
-            return;
+        boolean connected = false;
+
+        while (!connected) {
+            String serverIp = UIUtils.readString("Enter Server IP (e.g., 127.0.0.1 or 10.60.x.x): ");
+
+            System.out.println("Attempting connection to " + serverIp + "...");
+
+            connected = connection.connect(serverIp, 9000);
+
+            if (!connected) {
+                System.err.println("ERROR: Could not connect to server at " + serverIp + ". Please re-enter the IP.");
+                // El bucle while continuará si la conexión falla
+            }
         }
 
         System.out.println("\nConnected to server.\n");
