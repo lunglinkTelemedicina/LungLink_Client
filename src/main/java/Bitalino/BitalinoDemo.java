@@ -21,7 +21,7 @@ public class BitalinoDemo {
         System.out.println("BITalino Connection");
 
         BITalino device = new BITalino();
-        String mac = UIUtils.readString("Enter BITalino MAC (Ej: 98:D3:41:FD:4E:E8): ");
+        String mac = UIUtils.readString("Enter BITalino MAC (Example: 98:D3:41:FD:4E:E8): ");
         mac = mac.trim();
 
         System.out.println("Connecting to BITalino at MAC: " + mac);
