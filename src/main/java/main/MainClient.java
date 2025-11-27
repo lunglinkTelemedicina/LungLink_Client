@@ -12,7 +12,7 @@ public class MainClient {
         ClientConnection connection = new ClientConnection();
         ClientService service = new ClientService();
 
-        if (!connection.connect("10.60.112.39", 9000)) {
+        if (!connection.connect("10.60.115.126", 9000)) {
             System.out.println("Could not connect to server.");
             return;
         }
@@ -64,7 +64,6 @@ public class MainClient {
             if (response.contains("NO_CLIENT")) {
 
                 System.out.println("No patient profile found. Let's create one.");
-                System.out.println("DEBUG >>> user_id enviado al servidor = " + user.getId());
                 client = service.createClientForUser(user, connection);
 
                 if (client == null) {
