@@ -12,7 +12,7 @@ public class MainClient {
         ClientConnection connection = new ClientConnection();
         ClientService service = new ClientService();
 
-        if (!connection.connect("10.60.124.197", 9000)) {
+        if (!connection.connect("10.60.115.142", 9000)) {
             System.out.println("Could not connect to server.");
             return;
         }
@@ -68,6 +68,7 @@ public class MainClient {
 
                 if (client == null) {
                     System.out.println("Error creating client profile.");
+                    connection.disconnect();
                     return;
                 }
 

@@ -207,11 +207,24 @@ public class ClientService {
         String name = UIUtils.readString("Name: ");
         String surname = UIUtils.readString("Surname: ");
 
-        int day = UIUtils.readInt("Birth day: ");
-        int month = UIUtils.readInt("Birth month: ");
-        int year = UIUtils.readInt("Birth year: ");
+        String dob;
+        int day;
+        int month;
+        int year;
+        while(true) {
+            try {
 
-        String dob = day + "-" + month + "-" + year;
+                day = UIUtils.readInt("Birth day: ");
+                month = UIUtils.readInt("Birth month: ");
+                year = UIUtils.readInt("Birth year: ");
+                java.time.LocalDate.of(year, month, day);
+                dob = day + "-" + month + "-" + year;
+                break;
+
+            } catch (java.time.DateTimeException e) {
+                System.err.println("ERROR: Invalid date entered" + e.getLocalizedMessage() + " Please re-enter the date");
+            }
+        }
 
         System.out.println("Sex:");
         System.out.println("1. MALE");
