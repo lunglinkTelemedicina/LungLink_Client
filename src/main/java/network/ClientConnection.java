@@ -70,33 +70,33 @@ public class ClientConnection {
             System.out.println("Error sending bytes." + e.getMessage());
         }
     }
-
-    public void sendSignalFromCSV(String filePath, int clientId, TypeSignal type){
-        try{
-            Signal signal = SignalFileManager.getSignalFromCSV(filePath, type, clientId);
-
-            // el servidor espera SEND_ECG o SEND_EMG
-            sendCommand("SEND_" + type.name() + "|" + clientId + "|" + signal.getValues().size());
-
-            String response = receiveResponse();
-            if (response == null || !response.contains("Client can send the data")) {
-                System.out.println("Server did not authorize sending data.");
-                return;
-            }
-
-            sendBytes(signal.toByteArray());
-
-            //he añadido esto 26/11/2025
-            String finalResponse = receiveResponse();
-            System.out.println("Server final response: " + finalResponse);
-            //hasta aqui
-
-            System.out.println("Signal sent successfully from CSV.");
-
-        } catch (IOException e) {
-            System.out.println("Error sending data from CSV: " + e.getMessage());
-        }
-    }
+//
+//    public void sendSignalFromCSV(String filePath, int clientId, TypeSignal type){
+//        try{
+//            Signal signal = SignalFileManager.getSignalFromCSV(filePath, type, clientId);
+//
+//            // el servidor espera SEND_ECG o SEND_EMG
+//            sendCommand("SEND_" + type.name() + "|" + clientId + "|" + signal.getValues().size());
+//
+//            String response = receiveResponse();
+//            if (response == null || !response.contains("Client can send the data")) {
+//                System.out.println("Server did not authorize sending data.");
+//                return;
+//            }
+//
+//            sendBytes(signal.toByteArray());
+//
+//            //he añadido esto 26/11/2025
+//            String finalResponse = receiveResponse();
+//            System.out.println("Server final response: " + finalResponse);
+//            //hasta aqui
+//
+//            System.out.println("Signal sent successfully from CSV.");
+//
+//        } catch (IOException e) {
+//            System.out.println("Error sending data from CSV: " + e.getMessage());
+//        }
+//    }
     public void sendSignalFromBITalino(Signal signal) {
         try {
             sendCommand("SEND_" + signal.getType().name() + "|" + signal.getClientId() + "|" + signal.getValues().size());
