@@ -211,7 +211,7 @@ public class ClientService {
         int day,month, year;
         while(true) {
             try {
-                System.out.println("\n--- Enter Date of Birth ---");
+
                 day = UIUtils.readInt("Birth day: ");
                 month = UIUtils.readInt("Birth month: ");
                 year = UIUtils.readInt("Birth year: ");
@@ -220,7 +220,7 @@ public class ClientService {
                 break;
 
             } catch (java.time.DateTimeException e) {
-                System.err.println("ERROR: Invalid date entered" + e.getLocalizedMessage() );
+                System.out.println("ERROR: Invalid date entered" + e.getLocalizedMessage());
 
             }
         }
