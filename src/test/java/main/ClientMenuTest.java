@@ -65,7 +65,7 @@ class ClientMenuTest {
      * Verifica que se envíe DISCONNECT y se llame al método disconnect().
      */
     @Test
-    void displayMenu_ExitOption_DisconnectsAndExits() {
+    void displayMenu_ExitOption_DisconnectsAndExits() throws IOException{
         // Usamos MockedStatic para controlar UIUtils.readInt()
         try (MockedStatic<UIUtils> mockedUIUtils = mockStatic(UIUtils.class)) {
 
@@ -109,7 +109,7 @@ class ClientMenuTest {
      * Prueba el flujo de envío de ECG (Opción 2).
      */
     @Test
-    void displayMenu_SendECGSignal_CallsBitalinoDemo() {
+    void displayMenu_SendECGSignal_CallsBitalinoDemo() throws IOException{
         // Mockeamos el constructor de BitalinoDemo para verificar la llamada
         try (MockedConstruction<BitalinoDemo> mockedConstruction = mockConstruction(BitalinoDemo.class);
              MockedStatic<UIUtils> mockedUIUtils = mockStatic(UIUtils.class)) {
