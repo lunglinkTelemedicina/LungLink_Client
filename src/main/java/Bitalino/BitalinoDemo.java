@@ -19,43 +19,8 @@ public class BitalinoDemo {
     private BITalino connectToBitalino() throws Exception {
 
         System.out.println("BITalino Connection");
-        System.out.println("...Automatic Bluetooth search...");
 
         BITalino device = new BITalino();
-
-        Vector<RemoteDevice> found = null;
-
-        try {
-            found = device.findDevices();
-        } catch (Exception e) {
-            System.out.println("Bluetooth search failed. Will ask for MAC manually.");
-        }
-
-        // Si encuentra el dispositivo, entonces:
-        if (found != null && !found.isEmpty()) {
-
-            System.out.println("BITalino devices found:");
-            int index = 1;
-            for (RemoteDevice dev : found) {
-                System.out.println(index + ") " + dev.getBluetoothAddress());
-                index++;
-            }
-
-            int choice = UIUtils.readInt("Select device number: ");
-            RemoteDevice selected = found.get(choice - 1);
-
-            String mac = selected.getBluetoothAddress();
-
-            System.out.println("Connecting to BITalino at MAC: " + mac);
-            device.open(mac, SAMPLING_RATE);
-
-            return device;
-        }
-
-        // Si no lo encuentra, entonces introduce la MAC
-        System.out.println("No BITalino detected automatically.");
-        System.out.println("Please enter the MAC address manually.");
-
         String mac = UIUtils.readString("Enter BITalino MAC (Ej: 98:D3:41:FD:4E:E8): ");
         mac = mac.trim();
 
