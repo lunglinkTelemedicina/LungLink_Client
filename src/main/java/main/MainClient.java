@@ -15,15 +15,20 @@ public class MainClient {
         boolean connected = false;
 
         while (!connected) {
-            String serverIp = UIUtils.readString("Enter Server IP (for example 192.168.1.44 or localhost): ");
+            String serverIp = UIUtils.readString("Enter Server IP (for example 192.168.1.44 or localhost): " .trim());
+
+            //this does not allow connection to server if there is no previous answer
+            if (serverIp.isEmpty()) {
+                System.out.println("ERROR: You must enter a valid IP. It cannot be empty.");
+                continue;
+            }
 
             System.out.println("Attempting connection to " + serverIp + "...");
 
             connected = connection.connect(serverIp, 9000);
 
             if (!connected) {
-                System.err.println("ERROR: Could not connect to server at " + serverIp + ". Please re-enter the IP.");
-                // El bucle while continuará si la conexión falla
+                System.out.println("ERROR: Could not connect to server at " + serverIp + ". Please re-enter the IP.");
             }
         }
 

@@ -210,7 +210,6 @@ public class ClientService {
         }
 
         throw new IOException("Unexpected server response: " + response);
-        //throw new IOException("Registration failed: " + response);
 
     }
 
