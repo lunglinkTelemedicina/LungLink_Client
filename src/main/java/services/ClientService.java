@@ -273,22 +273,22 @@ public class ClientService {
 
         String sex = (s == 1) ? "MALE" : "FEMALE";
 
-        String mail = null;
+        String email = null;
         String response = null;
         boolean emailValid = false;
 
         while (!emailValid) {
-            mail = UIUtils.readString("Email: ");
+            email = UIUtils.readString("Email: ");
 
 
-            if (!mail.contains("@")) {
-                System.out.println("\nERROR: Invalid email format. Must contain '@'.");
+            if (!email.contains("@") || !(email.endsWith(".com") || email.endsWith(".es"))) {
+                System.out.println("\nERROR: Invalid email. Please enter a valid address.");
 
                 continue;
             }
 
             String cmd = "CREATE_CLIENT|" + user.getId() + "|" +
-                    name + "|" + surname + "|" + dob + "|" + sex + "|" + mail;
+                    name + "|" + surname + "|" + dob + "|" + sex + "|" + email;
 
             conn.sendCommand(cmd);
             response = conn.receiveResponse();
@@ -311,7 +311,7 @@ public class ClientService {
                 c.setClientId(clientId);
                 c.setName(name);
                 c.setSurname(surname);
-                c.setMail(mail);
+                c.setMail(email);
                 c.setSex(Sex.valueOf(sex));
                 c.setDob(LocalDate.of(year, month, day));
                 c.setUserId(user.getId());
