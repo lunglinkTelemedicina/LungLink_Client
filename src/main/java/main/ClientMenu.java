@@ -37,14 +37,10 @@ public class ClientMenu {
                             break;
 
                         case 2:
-                            //                        String ecgPath = UIUtils.readString("Enter ECG CSV file path: ");
-                            //                        connection.sendSignalFromCSV(ecgPath, client.getClientId(), TypeSignal.ECG);
                             new BitalinoDemo().acquireECGfromBITalino(connection, client.getClientId());
                             break;
 
                         case 3:
-                            //                          String emgPath = UIUtils.readString("Enter EMG CSV file path: ");
-                            //                        connection.sendSignalFromCSV(emgPath, client.getClientId(), TypeSignal.EMG);
                             new BitalinoDemo().acquireEMGfromBITalino(connection, client.getClientId());
                             break;
 

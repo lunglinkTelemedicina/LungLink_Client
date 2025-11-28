@@ -68,10 +68,10 @@ public class ClientService {
         String reply = clientConnection.receiveResponse();
 
         if (reply == null) {
-            throw new IOException("No response from server after sending extra info"+reply.split("\\|")[1]);
+            throw new IOException("No response from server after sending extra info");
         }
         if(reply.startsWith("ERROR|")) {
-            throw new IOException("Server application error while saving extra info: "+reply.split("\\|")[1]);
+            System.out.println("The server could not save the extra information, please try again: " + reply.split("\\|")[1]);
         }
 
         System.out.println("SERVER: " + reply); //client must receive form server: "OK|Extra info saved"
@@ -138,7 +138,9 @@ public class ClientService {
 
             // 3. Check if server returned an error message
             if (response.startsWith("ERROR")) {
-                throw new IOException("Server application error retrieving history"+response.split("\\|")[1]);
+                //throw new IOException("Server application error retrieving history"+response.split("\\|")[1]);
+                System.out.println("\nYou do not have any medical history yet.");
+                return;
             }
 
             // 4. Display results
@@ -171,7 +173,12 @@ public class ClientService {
                 throw new IOException("Invalid server response format during login: " + response + ". " + e.getMessage(), e);
             }
         }
-        throw new IOException("User login failed: " + response);
+
+        if (response.startsWith("ERROR|")) {
+            System.out.println("\nInvalid credentials. Please try again.");
+            return null;
+        }
+        throw new IOException("Unexpected response from server: " + response);
     }
 
     public User registerUser(ClientConnection conn) throws IOException {
@@ -194,10 +201,16 @@ public class ClientService {
                 System.out.println("User created. ID = " + id);
                 return new User(id, username, password);
             }catch(NumberFormatException | ArrayIndexOutOfBoundsException e) {
-                throw new IOException("Invalid server response format during register user: " + response + ". " + e.getMessage(), e);
+                throw new IOException("\nInvalid server response format during register user: " + response + ". " + e.getMessage(), e);
             }
         }
-        throw new IOException("Registration failed: " + response);
+        if (response.startsWith("ERROR|")) {
+            System.out.println("\nRegistration failed: " + response.split("\\|")[1]);
+            return null;
+        }
+
+        throw new IOException("Unexpected server response: " + response);
+        //throw new IOException("Registration failed: " + response);
 
     }
 
@@ -209,26 +222,55 @@ public class ClientService {
 
         String dob;
         int day,month, year;
-        while(true) {
-            try {
-
-                day = UIUtils.readInt("Birth day: ");
-                month = UIUtils.readInt("Birth month: ");
-                year = UIUtils.readInt("Birth year: ");
-                java.time.LocalDate.of(year, month, day);
-                dob = day + "-" + month + "-" + year;
-                break;
-
-            } catch (java.time.DateTimeException e) {
-                System.out.println("ERROR: Invalid date entered" + e.getLocalizedMessage());
+                while (true) {
+                    day = UIUtils.readInt("Birth day: ");
+                    if (day < 1 || day > 31) {
+                        System.out.println("\nERROR: Day must be between 1 and 31.");
+                    } else {
+                        break;
+                    }
+                }
+                while (true) {
+                    month = UIUtils.readInt("Birth month: ");
+                    if (month < 1 || month > 12) {
+                        System.out.println("\nERROR: Month must be between 1 and 12.");
+                    } else {
+                        break;
+                    }
+                }
+                while (true) {
+                    year = UIUtils.readInt("Birth year: ");
+                    int currentYear = java.time.LocalDate.now().getYear();
+                    if (year > currentYear) {
+                        System.out.println("\nERROR: Year must be previous to the current one.");
+                    } else {
+                        break;
+                    }
+                }
+                while (true) {
+                    try{
+                        java.time.LocalDate.of(year, month, day);
+                        dob = day + "-" + month + "-" + year;
+                        break;
+                    }catch (java.time.DateTimeException e) {
+                        System.out.println("ERROR: Invalid date entered" + e.getLocalizedMessage());
+                }
 
             }
-        }
 
-        System.out.println("Sex:");
-        System.out.println("1. MALE");
-        System.out.println("2. FEMALE");
-        int s = UIUtils.readInt("Choose: ");
+
+        int s;
+
+        while (true) {
+            System.out.println("Gender:");
+            System.out.println("1. MALE");
+            System.out.println("2. FEMALE");
+            s = UIUtils.readInt("Choose (1-2): ");
+
+            if (s == 1 || s == 2) break;
+
+            System.out.println("\nERROR: Invalid option. Enter 1 for MALE or 2 for FEMALE.");
+        }
 
         String sex = (s == 1) ? "MALE" : "FEMALE";
 
@@ -236,13 +278,12 @@ public class ClientService {
         String response = null;
         boolean emailValid = false;
 
-        // Bucle para validar unicidad y formato del email
         while (!emailValid) {
             mail = UIUtils.readString("Email: ");
 
 
             if (!mail.contains("@")) {
-                System.out.println("ERROR: Invalid email format. Must contain '@'.");
+                System.out.println("\nERROR: Invalid email format. Must contain '@'.");
 
                 continue;
             }
@@ -257,7 +298,7 @@ public class ClientService {
                 throw new IOException("Server not responding during creation");
             }
             if (response.equals("ERROR|Email already in use")) {
-                System.out.println("ERROR: The email is already in use. Please enter a different email.");
+                System.out.println("\nERROR: The email is already in use. Please enter a different email.");
             } else {
                 emailValid = true;
             }
