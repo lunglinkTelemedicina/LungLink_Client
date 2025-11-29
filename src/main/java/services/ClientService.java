@@ -256,8 +256,7 @@ public class ClientService {
                 }
 
             }
-
-
+        Sex selectedSex=null;
         int s;
 
         while (true) {
@@ -266,12 +265,17 @@ public class ClientService {
             System.out.println("2. FEMALE");
             s = UIUtils.readInt("Choose (1-2): ");
 
-            if (s == 1 || s == 2) break;
-
+            if (s == 1){
+                selectedSex = Sex.MALE;
+                break;
+            } else if (s == 2) {
+                selectedSex = Sex.FEMALE;
+                break;
+            }
             System.out.println("\nERROR: Invalid option. Enter 1 for MALE or 2 for FEMALE.");
         }
 
-        String sex = (s == 1) ? "MALE" : "FEMALE";
+        String sex = selectedSex.name();
 
         String email = null;
         String response = null;
