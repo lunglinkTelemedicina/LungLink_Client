@@ -13,7 +13,7 @@ import java.util.Vector;
 public class BitalinoDemo {
 
     private static final int SAMPLING_RATE = 100; // 100 muestras/segundo
-    private static final int NUM_SAMPLES = 200;
+    private static final int NUM_SAMPLES = 600;
 
 
     private BITalino connectToBitalino() throws Exception {
