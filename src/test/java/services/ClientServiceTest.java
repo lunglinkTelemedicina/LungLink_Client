@@ -43,10 +43,6 @@ class ClientServiceTest {
         testUser = new User(USER_ID, "testUser", "password123");
     }
 
-    // ====================================================================
-    // 1. Tests para registerSymptoms (Registro de Síntomas)
-    // ====================================================================
-
     @Test
     void registerSymptoms_Success_ValidCommandSent() throws IOException {
         String symptom1 = "cough";
@@ -87,11 +83,6 @@ class ClientServiceTest {
         }
     }
 
-
-    // ====================================================================
-    // 2. Tests para addExtraInformation (Peso/Altura)
-    // ====================================================================
-
     @Test
     void addExtraInformation_Success_ValidCommandSent() throws IOException {
         double height = 180.5;
@@ -111,9 +102,6 @@ class ClientServiceTest {
         }
     }
 
-    // ====================================================================
-    // 3. Tests para sendSignal (Envío de Señal)
-    // ====================================================================
 
     @Test
     void sendSignal_Success_CommandAndBytesSent() {
@@ -126,13 +114,11 @@ class ClientServiceTest {
 
         String expectedCommand = "SEND_EMG|" + CLIENT_ID + "|" + signal.getValues().size();
 
-        // Configurar la respuesta del Stub para la autorización de envío
         fakeConnection.setNextResponse(successReply);
 
         assertDoesNotThrow(() -> clientService.sendSignal(signal, fakeConnection),
                 "El envío de señal no debe lanzar excepción en flujo exitoso.");
 
-        // El test verifica si el FakeConnection fue llamado con el protocolo correcto
         assertEquals(expectedCommand, fakeConnection.getLastSentCommand(),
                 "La cabecera del comando no es correcta.");
         assertEquals(expectedBytesLength, fakeConnection.getLastSentBytes().length,
@@ -149,10 +135,6 @@ class ClientServiceTest {
                 "No debe enviar comando si la señal está vacía.");
     }
 
-    // ====================================================================
-    // 4. Tests para viewHistory (Ver Historial)
-    // ====================================================================
-
     @Test
     void viewHistory_Success_ValidCommandSent() throws IOException {
         String history = "Medical History\nDATE: 2025-11-20\nSYMPTOMS: headache\n";
@@ -168,22 +150,20 @@ class ClientServiceTest {
     }
 
     @Test
-    void viewHistory_ServerReturnsError_ThrowsIOException() {
+    void viewHistory_NoHistory_HandledGracefully() {
         String serverError = "ERROR|No history found";
+        String expectedCommand = "GET_HISTORY|" + CLIENT_ID;
 
+        // Configurar el Stub para que simule la respuesta de error de negocio
         fakeConnection.setNextResponse(serverError);
 
-        IOException exception = assertThrows(IOException.class, () -> {
+        assertDoesNotThrow(() -> {
             clientService.viewHistory(testClient, fakeConnection);
-        }, "Debe lanzar IOException al recibir ERROR del servidor.");
+        }, "El método NO debe lanzar una excepción para un error de negocio esperado (No history).");
 
-        assertTrue(exception.getMessage().contains("Server application error retrieving history"),
-                "La excepción debe contener el mensaje de error del servidor.");
+        assertEquals(expectedCommand, fakeConnection.getLastSentCommand(),
+                "El comando enviado no coincide con el protocolo GET_HISTORY.");
     }
-
-    // ====================================================================
-    // 5. Tests para loginUser (Inicio de Sesión)
-    // ====================================================================
 
     @Test
     void loginUser_Success_ReturnsUser() throws IOException {
@@ -207,10 +187,6 @@ class ClientServiceTest {
         }
     }
 
-    // ====================================================================
-    // 6. Tests para registerUser (Registro de Usuario)
-    // ====================================================================
-
     @Test
     void registerUser_Success_ReturnsUser() throws IOException {
         String username = "newUser";
@@ -232,10 +208,6 @@ class ClientServiceTest {
             assertEquals(newId, user.getId(), "El ID del usuario debe ser el devuelto por el servidor.");
         }
     }
-
-    // ====================================================================
-    // 7. Tests para createClientForUser (Creación de Perfil de Cliente)
-    // ====================================================================
 
     @Test
     void createClientForUser_Success_ReturnsClient() throws IOException {
