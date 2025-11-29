@@ -48,7 +48,13 @@ public class ClientConnection {
     }
 
 
-    //Send binary samples (BITalino)
+    /**
+     * Sends binary data to the server. Used primarily for BITalino signal data transmission.
+     * The method first sends the length of the data array followed by the actual bytes.
+     *
+     * @param data The byte array containing the data to be sent
+     * @throws IOException If an error occurs while writing to the output stream
+     */
     public void sendBytes(byte[] data)throws IOException{
             dataOut.writeInt(data.length);
             dataOut.write(data);

@@ -6,7 +6,18 @@ import services.ClientService;
 import utils.UIUtils;
 import java.io.IOException;
 
+/**
+ * Main client application class for the LungLink system.
+ * Handles user authentication, client profile management, and connection to the server.
+ */
 public class MainClient {
+    /**
+     * Entry point of the client application.
+     * Manages server connection, user authentication, and client profile operations.
+     *
+     * @param args Command line arguments (not used)
+     * @throws IOException If there is an error in network communication
+     */
     public static void main(String[] args) throws IOException {
 
         ClientConnection connection = new ClientConnection();

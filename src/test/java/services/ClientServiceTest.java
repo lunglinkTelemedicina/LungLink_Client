@@ -6,8 +6,7 @@ import pojos.Sex;
 import pojos.Signal;
 import pojos.TypeSignal;
 import utils.UIUtils;
-import utils.FakeClientConnection; // Importa la clase Stub desde tu paquete utils
-
+import utils.FakeClientConnection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -16,7 +15,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*; // Usado solo para mockStatic y anyString/anyInt
+import static org.mockito.Mockito.*;
 
 class ClientServiceTest {
 
@@ -29,13 +28,10 @@ class ClientServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Inicializar el servicio a probar
         clientService = new ClientService();
 
-        // Inicializar el Fake/Stub de la conexión
         fakeConnection = new FakeClientConnection();
 
-        // Inicializar los POJOs necesarios
         testClient = new Client();
         testClient.setClientId(CLIENT_ID);
         testClient.setUserId(USER_ID);
@@ -54,7 +50,7 @@ class ClientServiceTest {
             mockedUIUtils.when(() -> UIUtils.readString(anyString()))
                     .thenReturn(symptom1)
                     .thenReturn(symptom2)
-                    .thenReturn(""); // Cierra el bucle
+                    .thenReturn("");
 
             fakeConnection.setNextResponse(serverReply);
             clientService.registerSymptoms(testClient, fakeConnection);
@@ -109,7 +105,7 @@ class ClientServiceTest {
         signal.addSample(10);
         signal.addSample(20);
 
-        int expectedBytesLength = 4; // 2 muestras * 2 bytes/muestra
+        int expectedBytesLength = 4;
         String successReply = "OK|Client can send the data";
 
         String expectedCommand = "SEND_EMG|" + CLIENT_ID + "|" + signal.getValues().size();
@@ -154,7 +150,6 @@ class ClientServiceTest {
         String serverError = "ERROR|No history found";
         String expectedCommand = "GET_HISTORY|" + CLIENT_ID;
 
-        // Configurar el Stub para que simule la respuesta de error de negocio
         fakeConnection.setNextResponse(serverError);
 
         assertDoesNotThrow(() -> {
@@ -180,7 +175,6 @@ class ClientServiceTest {
             fakeConnection.setNextResponse(serverReply);
             User user = clientService.loginUser(fakeConnection);
 
-            // Verificaciones
             assertEquals(expectedCommand, fakeConnection.getLastSentCommand(), "El comando enviado es incorrecto.");
             assertNotNull(user, "El objeto User no debe ser nulo.");
             assertEquals(USER_ID, user.getId(), "El ID del usuario debe ser el devuelto por el servidor.");
@@ -220,22 +214,20 @@ class ClientServiceTest {
         String serverReply = "OK|" + newClientId;
 
         try (MockedStatic<UIUtils> mockedUIUtils = mockStatic(UIUtils.class)) {
-            // Configurar el flujo de entrada para simular el usuario escribiendo
             mockedUIUtils.when(() -> UIUtils.readString(anyString()))
                     .thenReturn(name) // Nombre
                     .thenReturn(surname); // Apellido
 
             mockedUIUtils.when(() -> UIUtils.readInt(anyString()))
                     .thenReturn(15).thenReturn(10).thenReturn(1998) // DOB
-                    .thenReturn(2); // Sexo (2 -> FEMALE)
+                    .thenReturn(2); // Sex (2 -> FEMALE)
 
-            // Simular el email válido y el servidor respondiendo OK en la primera llamada
             mockedUIUtils.when(() -> UIUtils.readString(eq("Email: "))).thenReturn(mail);
             fakeConnection.setNextResponse(serverReply);
 
             Client client = clientService.createClientForUser(testUser, fakeConnection);
 
-            // Verificaciones
+
             assertTrue(fakeConnection.getLastSentCommand().startsWith("CREATE_CLIENT"),
                     "El comando de creación no se construyó correctamente.");
             assertEquals(newClientId, client.getClientId(), "El ID del cliente debe ser el devuelto.");

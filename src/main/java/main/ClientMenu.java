@@ -10,12 +10,23 @@ import utils.UIUtils;
 
 import java.io.InputStreamReader;
 
+/**
+ * Manages the interactive menu interface for client operations in the medical monitoring system.
+ * Handles user input and coordinates various client actions such as symptom registration,
+ * signal acquisition, and medical history viewing.
+ */
 public class ClientMenu {
 
     private final Client client;
     private final ClientConnection connection;
     private final ClientService service;
 
+    /**
+     * Constructs a new ClientMenu instance.
+     *
+     * @param client     The client entity for whom the menu operations will be performed
+     * @param connection The network connection used for communication with the server
+     */
     public ClientMenu(Client client, ClientConnection connection) {
             this.client = client;
             this.connection = connection;
@@ -23,7 +34,13 @@ public class ClientMenu {
             }
 
 
-        public void displayMenu() {
+    /**
+     * Displays and handles the main menu loop for client operations.
+     * Presents options for symptom registration, signal acquisition (ECG/EMG),
+     * viewing medical history, and adding extra information.
+     * Continues until the user chooses to disconnect.
+     */
+    public void displayMenu() {
             boolean exit = false;
 
             while (!exit) {
@@ -68,7 +85,10 @@ public class ClientMenu {
         }
 
 
-
+    /**
+     * Displays the available menu options to the user.
+     * Shows numbered options for all available client operations.
+     */
     private void showMenu() {
         System.out.println("\n PATIENT MENU");
         System.out.println("1. Register symptoms");

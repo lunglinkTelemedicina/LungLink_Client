@@ -13,6 +13,13 @@ import java.time.LocalDate;
 
 public class ClientService {
 
+    /**
+     * Registers symptoms for a client by prompting for input and sending to server.
+     *
+     * @param client           The client for whom symptoms are being registered
+     * @param clientConnection The connection to the server
+     * @throws IOException If there is an error in communication with the server
+     */
     public void registerSymptoms(Client client, ClientConnection clientConnection) throws IOException {
 
         System.out.println("REGISTER SYMPTOMS");
@@ -54,8 +61,13 @@ public class ClientService {
     }
 
 
-
-
+    /**
+     * Adds extra information (height and weight) for a client.
+     *
+     * @param client           The client for whom extra information is being added
+     * @param clientConnection The connection to the server
+     * @throws IOException If there is an error in communication with the server
+     */
     public void addExtraInformation(Client client, ClientConnection clientConnection) throws IOException {
         System.out.println("ADD EXTRA INFORMATION");
 
@@ -77,6 +89,12 @@ public class ClientService {
         System.out.println("SERVER: " + reply); //client must receive form server: "OK|Extra info saved"
     }
 
+    /**
+     * Sends a signal (ECG or EMG) to the server.
+     *
+     * @param signal The signal to be sent
+     * @param conn   The connection to the server
+     */
     public void sendSignal(Signal signal, ClientConnection conn) {
 
         List<Integer> values = signal.getValues();
@@ -122,6 +140,13 @@ public class ClientService {
     }
 
 
+    /**
+     * Retrieves and displays the medical history for a client.
+     *
+     * @param client           The client whose history is being requested
+     * @param clientConnection The connection to the server
+     * @throws IOException If there is an error in communication with the server
+     */
     public void viewHistory(Client client, ClientConnection clientConnection) throws IOException {
         System.out.println("VIEW MEDICAL HISTORY");
 
@@ -149,6 +174,13 @@ public class ClientService {
 
     }
 
+    /**
+     * Authenticates a user with the system.
+     *
+     * @param conn The connection to the server
+     * @return The authenticated User object, or null if authentication fails
+     * @throws IOException If there is an error in communication with the server
+     */
     public User loginUser(ClientConnection conn) throws IOException {
         System.out.println("\nLOGIN USER");
 
@@ -181,6 +213,13 @@ public class ClientService {
         throw new IOException("Unexpected response from server: " + response);
     }
 
+    /**
+     * Registers a new user in the system.
+     *
+     * @param conn The connection to the server
+     * @return The newly created User object, or null if registration fails
+     * @throws IOException If there is an error in communication with the server
+     */
     public User registerUser(ClientConnection conn) throws IOException {
         System.out.println("\nREGISTER USER");
 
@@ -213,6 +252,14 @@ public class ClientService {
 
     }
 
+    /**
+     * Creates a new client profile associated with a user.
+     *
+     * @param user The user for whom to create the client profile
+     * @param conn The connection to the server
+     * @return The newly created Client object
+     * @throws IOException If there is an error in communication with the server
+     */
     public Client createClientForUser(User user, ClientConnection conn) throws IOException {
         System.out.println("\nCREATE CLIENT PROFILE");
 

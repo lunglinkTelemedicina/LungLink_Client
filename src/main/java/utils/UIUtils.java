@@ -6,11 +6,21 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Utility class for handling console input operations.
+ * Provides methods for reading different types of user input with validation.
+ */
 public class UIUtils {
 
     private static final BufferedReader reader =
             new BufferedReader(new InputStreamReader(System.in));
 
+    /**
+     * Reads an integer from console input with validation.
+     *
+     * @param message The prompt message to display to the user
+     * @return The valid integer entered by the user
+     */
     public static int readInt(String message) {
 
         while (true) {
@@ -28,6 +38,12 @@ public class UIUtils {
         }
     }
 
+    /**
+     * Reads a string from console input.
+     *
+     * @param message The prompt message to display to the user
+     * @return The string entered by the user, trimmed of leading and trailing whitespace
+     */
     public static String readString (String message) {
         while (true) {
             try {
@@ -42,6 +58,12 @@ public class UIUtils {
         }
     }
 
+    /**
+     * Reads a double from console input with validation.
+     *
+     * @param message The prompt message to display to the user
+     * @return The valid double entered by the user
+     */
     public static double readDouble(String message) {
         while (true) {
             try {
