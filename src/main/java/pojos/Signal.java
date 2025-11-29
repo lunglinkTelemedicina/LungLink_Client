@@ -61,13 +61,17 @@ public class Signal {
 
 
     public byte[] toByteArray() {
-        byte[] data = new byte[values.size() * 2];
+        byte[] data = new byte[values.size() * 2]; //each sample=2 bytes; 1200 bytes
         int pos = 0;
 
         for (int v : values) {
-            short s = (short) v;
-            data[pos++] = (byte) (s >> 8);   // high byte
-            data[pos++] = (byte) s;          // low byte
+            short s = (short) v; // short(16-bit)
+            //storing the most significant byte
+            data[pos++] = (byte) (s >> 8); // high byte. Shifts the short 8 bytes to the right
+            //storing the least significant byte
+            data[pos++] = (byte) s; // low byte
+            //[|(OR)]
+
         }
         return data;
     }

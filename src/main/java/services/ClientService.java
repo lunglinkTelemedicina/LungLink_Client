@@ -42,11 +42,11 @@ public class ClientService {
             clientConnection.sendCommand(message);
 
             String reply = clientConnection.receiveResponse(); //servers response "OK|Symptoms saved"
-            if (reply == null) {//esto lanza un error de comunicacion o de red
+            if (reply == null) {//communication error
             throw new IOException("No response from server after sending symptoms.");
             }
 
-            if (reply.startsWith("ERROR|")) {//error en la aplicacion
+            if (reply.startsWith("ERROR|")) {//aplication error
             throw new IOException("Server application error: " + reply.split("\\|")[1]);
             }
 
@@ -94,7 +94,7 @@ public class ClientService {
             String header = command + "|" + signal.getClientId() + "|" + values.size();
             conn.sendCommand(header);
 
-            //Read confirmation from the server (if it sends one)
+            //Read confirmation from the server
             String reply = conn.receiveResponse();
             if (reply != null && reply.startsWith("OK|Client can send data")) {
                 System.out.println("SERVER: " + reply);
@@ -125,25 +125,25 @@ public class ClientService {
     public void viewHistory(Client client, ClientConnection clientConnection) throws IOException {
         System.out.println("VIEW MEDICAL HISTORY");
 
-            // 1. Send the command to the server
+            // Send the command to the server
             String command = CommandType.GET_HISTORY.name() + "|" + client.getClientId();
             clientConnection.sendCommand(command);
 
-            // 2. Receive server response
+            // Receive server response
             String response = clientConnection.receiveResponse();
 
             if (response == null) {
                 throw new IOException("No response from server after getting history.");
             }
 
-            // 3. Check if server returned an error message
+            // Check if server returned an error message
             if (response.startsWith("ERROR")) {
                 //throw new IOException("Server application error retrieving history"+response.split("\\|")[1]);
                 System.out.println("\nYou do not have any medical history yet.");
                 return;
             }
 
-            // 4. Display results
+            // Results
             System.out.println("\nMedical History");
             System.out.println(response);
 

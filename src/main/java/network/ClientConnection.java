@@ -68,10 +68,9 @@ public class ClientConnection {
 
             sendBytes(signal.toByteArray());
 
-            //he añadido esto 26/11/2025
+
             String finalResponse = receiveResponse();
             System.out.println("Server final response: " + finalResponse);
-            //hasta aqui
 
             System.out.println("Signal sent successfully (BITalino).");
 
@@ -81,14 +80,11 @@ public class ClientConnection {
     }
 
 
-
-
     public void disconnect() throws IOException{
         try {
             sendCommand("DISCONNECT");
         }catch (IOException ignored){
-            // Ignoramos el error de I/O aquí (Connection reset by peer)
-            // porque el propósito es solo limpiar los recursos, no enviar un mensaje.
+            // (Connection reset by peer)
         }
         releaseResources();
         System.out.println("Disconnected from server.");

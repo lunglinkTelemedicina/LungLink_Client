@@ -6,8 +6,6 @@ import services.ClientService;
 import utils.UIUtils;
 import java.io.IOException;
 
-//hasta aqui pequeño cambio
-
 public class MainClient {
     public static void main(String[] args) throws IOException {
 

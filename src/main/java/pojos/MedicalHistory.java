@@ -16,7 +16,7 @@ public class MedicalHistory {
     private List<String> symptomsList;
 
     public MedicalHistory() {
-        //constructor vacio
+        //empty constructor
     }
 
     public MedicalHistory(int clientId, int doctorId, String observations) {

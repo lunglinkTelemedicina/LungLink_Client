@@ -12,7 +12,7 @@ import java.util.Vector;
 
 public class BitalinoDemo {
 
-    private static final int SAMPLING_RATE = 100; // 100 muestras/segundo
+    private static final int SAMPLING_RATE = 100; // 100 samples/sec
     private static final int NUM_SAMPLES = 600;
 
 
@@ -33,38 +33,36 @@ public class BitalinoDemo {
     public void acquireECGfromBITalino(ClientConnection connection, int clientId) {
 
         try {
-            // Conectar BITalino
+            // connect the BITalino
             BITalino device = connectToBitalino();
 
-            // ECG = canal físico 2 -> indice 1
+            // ECG = channel 2 -> index 1
             int[] channelsToAcquire = {1};
             device.start(channelsToAcquire);
 
             List<Integer> samples = new ArrayList<>();
 
-            // Lee 200 muestras
+            // read samples
             int remaining = NUM_SAMPLES;
             while (remaining > 0) {
 
                 Frame[] frames = device.read(Math.min(10, remaining));
 
                 for (Frame f : frames) {
-                    samples.add(f.analog[0]); // 1 canal → analog[0]
+                    samples.add(f.analog[0]); // 1 chanel → analog[0]
                 }
 
                 remaining -= frames.length;
             }
 
-            // Para
+            // stops
             device.stop();
             device.close();
 
-            // Crea la señal para el servidor
+            // creates the signal for the server
             Signal s = new Signal(TypeSignal.ECG, clientId);
             samples.forEach(s::addSample);
-
             connection.sendSignalFromBITalino(s);
-
             System.out.println("ECG sent to server (" + samples.size() + " samples)");
 
         } catch (Exception e) {
@@ -80,16 +78,16 @@ public class BitalinoDemo {
         try {
             BITalino device = connectToBitalino();
 
-            // EMG = canal físico 1 -> indice 0
+            // EMG = channel 1 -> index 0
             int[] channelsToAcquire = {0};
             device.start(channelsToAcquire);
 
             List<Integer> samples = new ArrayList<>();
 
             int remaining = NUM_SAMPLES;
-            while (remaining > 0) { //lee de 10 en 10 frames hasta llegar a 200 muestras
+            while (remaining > 0) { //reads from 10 to 10 till it gets to 600 samples
 
-                Frame[] frames = device.read(Math.min(10, remaining)); //lee en bloques de 10, cada frame es una muestra
+                Frame[] frames = device.read(Math.min(10, remaining)); // each frame is a sample
 
                 for (Frame f : frames) {
                     samples.add(f.analog[0]);
@@ -103,9 +101,7 @@ public class BitalinoDemo {
 
             Signal s = new Signal(TypeSignal.EMG, clientId);
             samples.forEach(s::addSample);
-
             connection.sendSignalFromBITalino(s);
-
             System.out.println("EMG sent to server (" + samples.size() + " samples)");
 
         } catch (Exception e) {
