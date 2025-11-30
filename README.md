@@ -36,6 +36,7 @@ libs/
         └── DateUtils.java
 ```
 ## GUIDE
+```
 1- Open the project 
 2- Run: main.MainClient
 3- Introduce the server IP 
@@ -45,8 +46,8 @@ a) View medicalHistory
 b) Enter symptoms
 c) Record signals (EMG/ECG). Connect to the BITalino by the MAC address
 6- Disconnect
-
-## AUTTHORS 
+```
+## AUTHORS 
 - Martina Zandio
 - Ana Losada
 - Jimena Aineto
