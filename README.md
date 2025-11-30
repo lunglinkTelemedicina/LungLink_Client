@@ -4,8 +4,9 @@
 - Recording signals (ECG/EMG) via BITalino and sending them to the server
 - Viewing medicalHistory
 - Communicating with the server using a TCP command-based protocol
----
+
 ## PROJECT STRUCTURE
+```
 libs/
 ├── bluecove-2.1.1.jar
 └── bluecove-gpl-2.1.1.jar
@@ -33,7 +34,7 @@ libs/
         ├── SecurityUtils.java
         ├── BITalinoUtils.java
         └── DateUtils.java
----
+```
 ## GUIDE
 1- Open the project 
 2- Run: main.MainClient
@@ -44,7 +45,7 @@ a) View medicalHistory
 b) Enter symptoms
 c) Record signals (EMG/ECG). Connect to the BITalino by the MAC address
 6- Disconnect
----
+
 ## AUTTHORS 
 - Martina Zandio
 - Ana Losada
