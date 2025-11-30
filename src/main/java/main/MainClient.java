@@ -46,7 +46,7 @@ public class MainClient {
         System.out.println("\nConnected to server.\n");
 
         User user = null;
-        Client client = null;
+        Client client;
 
         while (user == null) {
             System.out.println("\nWELCOME TO LUNGLINK");

@@ -1,10 +1,8 @@
 package network;
 
-import utils.UIUtils;
 import pojos.*;
 import java.io.*;
 import java.net.Socket;
-import java.time.LocalDate;
 
 /**
  * Connects to the server on the specified IP and port.

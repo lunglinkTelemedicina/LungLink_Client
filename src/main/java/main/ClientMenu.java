@@ -2,13 +2,10 @@ package main;
 
 import Bitalino.BitalinoDemo;
 import network.ClientConnection;
-import network.CommandType;
 import pojos.Client;
-import pojos.TypeSignal;
 import services.ClientService;
 import utils.UIUtils;
 
-import java.io.InputStreamReader;
 
 /**
  * Manages the interactive menu interface for client operations in the medical monitoring system.
