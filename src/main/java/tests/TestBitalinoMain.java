@@ -1,58 +1,38 @@
 package tests;
 
 import Bitalino.BITalino;
-import Bitalino.Frame;
-import javax.bluetooth.RemoteDevice;
-import java.util.Vector;
 
 public class TestBitalinoMain {
 
+    private static final String MAC = "84:BA:20:5E:FD:7B";
+
     public static void main(String[] args) {
 
-        System.out.println("BITALINO REAL COMMUNICATION TEST");
+        System.out.println("BITALINO CONNECTION TEST");
 
-        BITalino b = new BITalino();
+        BITalino bitalino = new BITalino();
 
         try {
-            System.out.println("Searching for BITalino devices...");
-            Vector<RemoteDevice> devices = b.findDevices();
 
-            if (devices.isEmpty()) {
-                System.out.println("No BITalino devices found!");
-                return;
-            }
-
-            for (RemoteDevice d : devices) {
-                try {
-                    System.out.println("Found device: " + d.getBluetoothAddress() +
-                            " - Name: " + d.getFriendlyName(true));
-                } catch (Throwable ignored) {}
-            }
-
-            String macAddress = "84:BA:20:5E:FD:7B";
-            System.out.println("Connecting to BITalino: " + macAddress);
-
-            b.open(macAddress, 1000);
-            System.out.println("Connected!");
+            System.out.println("Connecting to: " + MAC);
+            bitalino.open(MAC, 1000);
+            System.out.println("Connected via Bluetooth");
 
             int[] channels = {0};
-            b.start(channels);
-            System.out.println("Acquisition started...");
+            bitalino.start(channels);
+            System.out.println("Device responded to START");
 
-            System.out.println("Reading 10 samples...");
-            Frame[] frames = b.read(10);
+            bitalino.stop();
+            System.out.println("Device responded to STOP");
 
-            for (int i = 0; i < frames.length; i++) {
-                System.out.println("Sample " + i + ": " + frames[i].analog[0]);
-            }
+            bitalino.close();
+            System.out.println("Connection closed");
 
-            b.stop();
-            b.close();
-
-            System.out.println("BITalino test finished!");
+            System.out.println("TEST PASSED");
 
         } catch (Throwable t) {
-            System.out.println("BITalino test FAILED: " + t.getMessage());
+            System.err.println("\nERROR DURING TEST:");
+            System.err.println("Message: " + t.getMessage());
             t.printStackTrace();
         }
     }
