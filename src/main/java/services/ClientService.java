@@ -7,8 +7,6 @@ import utils.UIUtils;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.time.LocalDate;
 
 public class ClientService {
@@ -53,13 +51,12 @@ public class ClientService {
             throw new IOException("No response from server after sending symptoms.");
             }
 
-            if (reply.startsWith("ERROR|")) {//aplication error
+            if (reply.startsWith("ERROR|")) { //application error
             throw new IOException("Server application error: " + reply.split("\\|")[1]);
             }
 
             System.out.println("SERVER: " + reply);
     }
-
 
     /**
      * Adds extra information (height and weight) for a client.
@@ -90,60 +87,9 @@ public class ClientService {
     }
 
     /**
-     * Sends a signal (ECG or EMG) to the server.
-     *
-     * @param signal The signal to be sent
-     * @param conn   The connection to the server
-     */
-    public void sendSignal(Signal signal, ClientConnection conn) {
-
-        List<Integer> values = signal.getValues();
-        if (values == null || values.isEmpty()) {
-            System.out.println("No values in signal.");
-            return;
-        }
-
-        try {
-            int samplesNumber = values.size();
-            String command = (signal.getType() == TypeSignal.ECG)
-                    ? CommandType.SEND_ECG.name()
-                    : CommandType.SEND_EMG.name();
-
-            String header = command + "|" + signal.getClientId() + "|" + values.size();
-            conn.sendCommand(header);
-
-            //Read confirmation from the server
-            String reply = conn.receiveResponse();
-            if (reply != null && reply.startsWith("OK|Client can send data")) {
-                System.out.println("SERVER: " + reply);
-            } else if (reply != null) {
-                // unexpected but we DO NOT return, we continue
-                System.out.println("SERVER (unexpected): " + reply);
-            }
-
-            //Send the signals as bytes
-            byte[] data = signal.toByteArray();
-            conn.sendBytes(data);
-
-            //Receive confirmation
-            String finalReply = conn.receiveResponse();
-            System.out.println("SERVER: " + finalReply);
-
-            System.out.println("Signal " + signal.getType() +
-                    " sent (" + values.size() + " samples).");
-
-
-        } catch (Exception e) {
-            Logger.getLogger(ClientService.class.getName()).log(Level.SEVERE, null, e);
-            System.out.println("Error sending signal: " + e.getMessage());
-        }
-    }
-
-
-    /**
      * Retrieves and displays the medical history for a client.
      *
-     * @param client           The client whose history is being requested
+     * @param client The client whose history is being requested
      * @param clientConnection The connection to the server
      * @throws IOException If there is an error in communication with the server
      */
@@ -301,9 +247,8 @@ public class ClientService {
                     }catch (java.time.DateTimeException e) {
                         System.out.println("ERROR: Invalid date entered" + e.getLocalizedMessage());
                 }
-
             }
-        Sex selectedSex=null;
+        Sex selectedSex = null;
         int s;
 
         while (true) {
@@ -378,7 +323,4 @@ public class ClientService {
     }
 
 }
-
-    
-
 
