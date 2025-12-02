@@ -1,55 +1,39 @@
-## LungLink_Client IS DESIGNED FOR: 
-- Registering and Logging as patients
-- Entering symptoms
-- Recording signals (ECG/EMG) via BITalino and sending them to the server
-- Viewing medicalHistory
-- Communicating with the server using a TCP command-based protocol
+Before cloning the GitHub repository, ensure that the following components are installed:
 
-## PROJECT STRUCTURE
-```
-libs/
-├── bluecove-2.1.1.jar
-└── bluecove-gpl-2.1.1.jar
-    ├── network/
-    │   ├── ClientConnection.java
-    │   ├── DataSender.java
-    │   ├── DataReceiver.java
-    │   └── FileUtils.java
+Required Software
+- Java 21 (JDK 21)
 
-    ├── services/
-    │   ├── ClientService.java
-    │   ├── SymptomService.java
-    │   ├── SignalService.java
-    │   └── FileService.java
+- A Java-compatible IDE (IntelliJ IDEA, Eclipse, etc.)
 
-    ├── pojos/
-    │   ├── Client.java
-    │   ├── User.java
-    │   ├── Signal.java
-    │   ├── TypeSignal.java
-    │   └── Symptoms.java
+- Windows OS (recommended due to Bluetooth compatibility)
 
-    └── utils/
-        ├── UIUtils.java
-        ├── SecurityUtils.java
-        ├── BITalinoUtils.java
-        └── DateUtils.java
-```
-## GUIDE
-```
-1- Open the project 
-2- Run: main.MainClient
-3- Introduce the server IP 
-4- User authentication (log in with your username and password or register as a new client)
-5- Menu Options: 
-a) View medicalHistory
-b) Enter symptoms
-c) Record signals (EMG/ECG). Connect to the BITalino by the MAC address
-6- Disconnect
-```
-## AUTHORS 
-- Martina Zandio
-- Ana Losada
+Project Dependencies
+
+- org.xerial:sqlite-jdbc:3.45.1.0 — SQLite JDBC driver
+
+- org.slf4j:slf4j-simple:1.7.36 — SLF4J simple logger
+
+If you want to run the project through IntelliJ:
+
+- Clone the repository to your local machine.
+
+- Build the project using:
+  mvn clean install
+
+- Run the Main class.
+
+If you prefer to run it directly from the terminal of your machine:
+
+- Download the executableJar folder located in the LungLink_Client directory.
+- Open a terminal and navigate through your directories using cd and ls until you reach the LungLink_Client-1.0-SNAPSHOT.jar file.
+- Execute the application with:
+  java -jar executableJar/LungLink_Client-1.0-SNAPSHOT.jar
+
+## AUTHORS
 - Jimena Aineto
-- Paula Reyero
+- Ana Losada
 - Sara Menor
+- Paula Reyero
+- Martina Zandio
+
+  
